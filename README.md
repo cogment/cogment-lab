@@ -1,4 +1,4 @@
-![for_esteemed_guest](https://github.com/cogment/cogment-lab/assets/19414946/5fb5f668-db74-45d8-8d36-e0c9bf886562)
+![cog-lab](https://github.com/cogment/cogment-lab/assets/19414946/5fb5f668-db74-45d8-8d36-e0c9bf886562)
 
 # Human + AI = ❤️
 
