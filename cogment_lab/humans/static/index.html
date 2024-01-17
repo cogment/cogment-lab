@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RL Env Interface</title>
+</head>
+<body>
+    <h1>RL Env Interface</h1>
+    <img id="env-render" alt="Cogment UI" width="400" height="400"><br>
+    <button id="start-button">Start</button>
+    <script>
+        let socket;
+        let isConnected = false;
+
+        document.getElementById('start-button').addEventListener('click', function() {
+            if (!isConnected) {
+                socket = new WebSocket("ws://" + location.host + "/ws");
+                socket.onmessage = function(event) {
+                    var landerImage = document.getElementById('env-render');
+                    landerImage.src = event.data;
+                };
+                isConnected = true;
+                this.style.display = 'none'; // Hide the button after it's clicked
+            }
+        });
+
+        let keyStates = {};  // Store the state of each key
+        let lastPressed = null;  // Keep track of the last key pressed
+
+        function updateAction() {
+            if (isConnected) {
+                console.log(keyStates);
+                console.log(lastPressed);
+                if (lastPressed && keyStates[lastPressed]) {
+                    console.log("sending pressed " + lastPressed);
+                    socket.send(lastPressed);  // Send the most recent key if it's still pressed
+                } else {
+                    console.log("sending no-op");
+                    socket.send('no-op');  // Send 'no-op' if no keys are pressed
+                }
+            }
+        }
+
+        window.onkeydown = function(event) {
+            if (event.repeat) { return; }  // Ignore auto-repeat to avoid spamming the server
+            keyStates[event.key] = true;  // Set the state to pressed
+            lastPressed = event.key;  // Update the last pressed key
+            updateAction();  // Update the action
+        };
+
+        window.onkeyup = function(event) {
+            keyStates[event.key] = false;  // Set the state to not pressed
+            updateAction();  // Update the action, possibly to 'no-op'
+        };
+
+    </script>
+</body>
+</html>

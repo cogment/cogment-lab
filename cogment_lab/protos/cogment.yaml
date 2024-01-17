@@ -1,0 +1,20 @@
+import:
+  proto:
+    - ndarray.proto
+    - spaces.proto
+    - data.proto
+
+environment:
+  config_type: cogment_lab.EnvironmentConfig
+
+trial:
+  config_type: cogment_lab.TrialConfig
+
+# Static configuration
+actor_classes:
+  - name: player
+    action:
+      space: cogment_lab.PlayerAction
+    observation:
+      space: cogment_lab.Observation
+    config_type: cogment_lab.AgentConfig

@@ -1,0 +1,6 @@
+license:
+  copyright_year: 2024
+  author: "AI Redefined Inc. <dev+cogment@ai-r.com>"
+  ignore:
+    - "**/.venv"
+    - "**/cog_settings.py"

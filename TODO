@@ -1,0 +1,19 @@
+Idea:
+- Support native gymnasium VectorEnv when we finish the API
+- Support launching the same environment in several processes as cogment-based vectorization
+
+
+
+TODO:
+- Improve robustness of the UI? (reconnecting, etc.)
+- Better UI builder (define buttons, sliders, etc.)
+- More QoL functions (are any missing?)
+- Clean up logging (probably need to define a logger somewhere in top level of the library? maybe in each file?)
+- Enable running services in the main process (async; actors work, do the same for envs and web_ui)
+- Maybe rename web_ui to human?
+- Add more conversions (observer, teacher for PettingZoo)
+- Add support for vectorized envs, vectorized actors
+- Add support for parallel envs
+- Do batched evaluation with vectorized envs, homogeneous pettingzoo parallel envs
+- Connect4 integration
+- Instead of a fancy BaseEnv/BaseActor, use Gymnasium EZPickle (or reimplement, it's super simple)

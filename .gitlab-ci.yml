@@ -1,0 +1,9 @@
+stages:
+  - lint
+
+licenses_checker:
+  stage: lint
+  image: registry.gitlab.com/ai-r/cogment/license-checker:latest
+  script:
+    - license-checker
+
