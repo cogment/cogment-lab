@@ -59,9 +59,9 @@ coltra = ["coltra>=0.2.1", "torch", "wandb>=0.13.9"]
 
 [project.urls]
 Homepage = "https://cogment.ai/lab"
-Repository = "https://github.com/cogment/cogment_lab"
+Repository = "https://github.com/cogment/cogment-lab"
 Documentation = "https://cogment.ai/lab"
-"Bug Report" = "https://github.com/cogment/cogment_lab/issues"
+"Bug Report" = "https://github.com/cogment/cogment-lab/issues"
 
 [tool.setuptools]
 include-package-data = true
