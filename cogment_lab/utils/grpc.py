@@ -14,9 +14,9 @@
 
 from __future__ import annotations
 
-from cogment_lab.core import Observation
-from cogment_lab.generated import data_pb2
 from google.protobuf.json_format import ParseDict
+
+from cogment_lab.generated import data_pb2
 
 
 def extend_actor_config(

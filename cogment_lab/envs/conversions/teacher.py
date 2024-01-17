@@ -12,28 +12,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import gymnasium as gym
 from pettingzoo import AECEnv, ParallelEnv
 from pettingzoo.utils.agent_selector import agent_selector
-import warnings
-import numpy as np
 
 
 class GymTeacherAEC(AECEnv):
     metadata = {"render_modes": ["rgb_array"]}
 
-    def __init__(self, gym_env_name: str, gym_make_kwargs: dict = {}, render_mode: str | None = None):
+    def __init__(
+        self,
+        gym_env_name: str,
+        gym_make_kwargs: dict = {},
+        render_mode: str | None = None,
+    ):
         super().__init__()
         self.gym_env = gym.make(gym_env_name, render_mode=render_mode, **gym_make_kwargs)
         self.possible_agents = ["gym", "teacher"]
         self.observation_spaces = {
             "gym": self.gym_env.observation_space,
             "teacher": gym.spaces.Dict(
-                {"observation": self.gym_env.observation_space, "action": self.gym_env.action_space}
+                {
+                    "observation": self.gym_env.observation_space,
+                    "action": self.gym_env.action_space,
+                }
             ),
         }
         teacher_action_space = gym.spaces.Dict({"active": gym.spaces.Discrete(2), "action": self.gym_env.action_space})
-        self.action_spaces = {"gym": self.gym_env.action_space, "teacher": teacher_action_space}
+        self.action_spaces = {
+            "gym": self.gym_env.action_space,
+            "teacher": teacher_action_space,
+        }
         self._agent_selector = agent_selector(self.possible_agents)
         self.override = False
         # self.reset()
@@ -115,17 +125,25 @@ class GymTeacherAEC(AECEnv):
 class GymTeacherParallel(ParallelEnv):
     metadata = {"render_modes": ["rgb_array"]}
 
-    def __init__(self, gym_env_name: str, gym_make_kwargs: dict = {}, render_mode: str | None = None):
+    def __init__(
+        self,
+        gym_env_name: str,
+        gym_make_kwargs: dict = {},
+        render_mode: str | None = None,
+    ):
         super().__init__()
         self.gym_env = gym.make(gym_env_name, render_mode=render_mode, **gym_make_kwargs)
         self.possible_agents = ["gym", "teacher"]
         self.observation_spaces = {
             "gym": self.gym_env.observation_space,
-            "teacher": self.gym_env.observation_space
+            "teacher": self.gym_env.observation_space,
         }
 
         teacher_action_space = gym.spaces.Dict({"active": gym.spaces.Discrete(2), "action": self.gym_env.action_space})
-        self.action_spaces = {"gym": self.gym_env.action_space, "teacher": teacher_action_space}
+        self.action_spaces = {
+            "gym": self.gym_env.action_space,
+            "teacher": teacher_action_space,
+        }
         self._agent_selector = agent_selector(self.possible_agents)
         self.override = False
         # self.reset()

@@ -15,10 +15,9 @@
 import numpy as np
 import torch
 from coltra import Agent
-from coltra.models import BaseModel
+from coltra.buffers import Action, Observation, OnPolicyRecord
 
 from cogment_lab.utils.trial_utils import TrialData
-from coltra.buffers import OnPolicyRecord, Observation, Action
 
 
 def convert_trial_data_to_coltra(trial_data: TrialData, agent: Agent) -> OnPolicyRecord:
@@ -26,7 +25,7 @@ def convert_trial_data_to_coltra(trial_data: TrialData, agent: Agent) -> OnPolic
 
     Args:
         trial_data (TrialData): TrialData instance
-        model (BaseModel): Model instance to evaluate values
+        model (Agent): Model instance to evaluate values
 
     Returns:
         OnPolicyRecord: Converted OnPolicyRecord instance

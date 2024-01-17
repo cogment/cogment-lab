@@ -16,13 +16,13 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Literal, Any
+from typing import Any
 
 import cogment
+import gymnasium as gym
 import numpy as np
 from cogment import ActorParameters
 from cogment.datastore import Datastore, DatastoreSample
-import gymnasium as gym
 
 from cogment_lab.core import CogmentEnv
 from cogment_lab.generated import cog_settings
@@ -164,6 +164,7 @@ async def format_data(
     assert agent_specs is None or env is None, "Only one of agent_specs and env can be provided"
 
     if agent_specs is None:
+        assert env is not None
         agent_specs = env.agent_specs
 
     trials = await datastore.get_trials([trial_id])
@@ -245,7 +246,9 @@ def extract_data_from_samples(
             next_obs = cog_observation_space.deserialize(samples[i + 1].actors_data[actor_name].observation).value
             write_to_buffer(data.next_observations, next_obs, i)
     if "last_observation" in fields:
-        last_obs = agent_specs.get_observation_space().deserialize(samples[-1].actors_data[actor_name].observation).value
+        last_obs = (
+            agent_specs.get_observation_space().deserialize(samples[-1].actors_data[actor_name].observation).value
+        )
         write_to_buffer(data.last_observation, last_obs, 0)
 
     return data

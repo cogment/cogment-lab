@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import subprocess
-import time
 
 import pytest
 

@@ -6,4 +6,3 @@ licenses_checker:
   image: registry.gitlab.com/ai-r/cogment/license-checker:latest
   script:
     - license-checker
-

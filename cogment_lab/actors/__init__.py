@@ -12,4 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .simple import RandomActor, ConstantActor
+from .nn_actor import BoltzmannActor, ColtraActor, NNActor
+from .simple import ConstantActor, RandomActor

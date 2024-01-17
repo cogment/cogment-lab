@@ -26,9 +26,8 @@ from cogment.environment import EnvironmentSession
 from cogment.session import RecvEvent
 
 from cogment_lab.session_helpers import ActorSessionHelper, EnvironmentSessionHelper
-from cogment_lab.specs import (
-    AgentSpecs
-)
+from cogment_lab.specs import AgentSpecs
+
 
 Action = TypeVar("Action")
 Actions = dict[str, Action]
@@ -134,7 +133,7 @@ class CogmentEnv(BaseEnv, abc.ABC, Generic[Observation, Action]):
 
         observations = list(observations.items())
 
-        logging.info(f"Starting environment session")
+        logging.info("Starting environment session")
 
         environment_session.start(observations)
 
@@ -142,7 +141,14 @@ class CogmentEnv(BaseEnv, abc.ABC, Generic[Observation, Action]):
             event: RecvEvent
             if event.actions:
                 actions = await self.read_actions(state, event)
-                state, observations, rewards, terminateds, truncateds, info = await self.step(state, actions)
+                (
+                    state,
+                    observations,
+                    rewards,
+                    terminateds,
+                    truncateds,
+                    info,
+                ) = await self.step(state, actions)
 
                 dones = {actor_name: terminateds[actor_name] or truncateds[actor_name] for actor_name in terminateds}
 
@@ -156,13 +162,13 @@ class CogmentEnv(BaseEnv, abc.ABC, Generic[Observation, Action]):
                 observations = list(observations.items())
 
                 if all(dones.values()):
-                    logging.info(f"Logging dones=True")
+                    logging.info("Logging dones=True")
                     environment_session.end(observations)
                 # elif event.type != cogment.EventType.ACTIVE:
                 #     logging.info("Logging event.type!=ACTIVE")
                 #     environment_session.end(observations)
                 else:
-                    logging.info(f"Logging a normal observation")
+                    logging.info("Logging a normal observation")
                     environment_session.produce_observations(observations)
 
         await self.end(state)

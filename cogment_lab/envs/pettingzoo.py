@@ -13,23 +13,18 @@
 # limitations under the License.
 
 import logging
-from typing import TypedDict, Any
+from typing import Any, TypedDict
 
 import numpy as np
+from cogment.environment import EnvironmentSession
 from cogment.session import RecvEvent
 from pettingzoo import AECEnv, ParallelEnv
 
-from cogment.environment import EnvironmentSession
-
 from cogment_lab.core import CogmentEnv, State
+from cogment_lab.generated.data_pb2 import Observation as PbObservation
 from cogment_lab.session_helpers import EnvironmentSessionHelper
 from cogment_lab.specs import AgentSpecs
-from cogment_lab.specs.observation_space import ObservationSpace
 from cogment_lab.utils import import_object
-from cogment_lab.generated.data_pb2 import (
-    Observation as PbObservation,
-)
-import pettingzoo
 
 
 class PZConfig(TypedDict):
@@ -259,8 +254,6 @@ class AECEnvironment(CogmentEnv):
         Returns:
             The agent specs dict.
         """
-        num_agents = len(env.possible_agents)
-
         # Check all observation and action spaces
 
         is_homogeneous = True
@@ -406,18 +399,15 @@ class ParallelEnvironment(CogmentEnv):
         frame = state.env.render() if state.session_cfg.render else None
         logging.info(f"Creating observation from {obs=}")
 
-
-
         if frame is not None:
             logging.info(f"Frame shape at reset: {frame.shape}")
         else:
             logging.info("Frame at reset is None")
 
         observations = {
-            agent:
-                state.observation_spaces[agent].create_serialize(
-                    value=obs[agent], rendered_frame=frame, active=True, alive=True
-                )
+            agent: state.observation_spaces[agent].create_serialize(
+                value=obs[agent], rendered_frame=frame, active=True, alive=True
+            )
             for agent in obs
         }
 
@@ -449,18 +439,15 @@ class ParallelEnvironment(CogmentEnv):
         else:
             logging.info("Frame at step is None")
 
-
         observations = {
-            agent:
-                state.observation_spaces[agent].create_serialize(
-                    value=obs[agent],
-                    rendered_frame=frame,
-                    active=True,
-                    alive=not (terminated[agent] or truncated[agent])
-                )
+            agent: state.observation_spaces[agent].create_serialize(
+                value=obs[agent],
+                rendered_frame=frame,
+                active=True,
+                alive=not (terminated[agent] or truncated[agent]),
+            )
             for agent in obs
         }
-
 
         return state, observations, rewards, terminated, truncated, info
 
@@ -474,13 +461,10 @@ class ParallelEnvironment(CogmentEnv):
         logging.info("Ending environment")
         state.env.close()
 
-
     async def read_actions(self, state: State, event: RecvEvent):
         """Read actions from event."""
-        player_actions = {agent: state.session_helper.get_action(event, agent).value
-                            for agent in state.actors}
+        player_actions = {agent: state.session_helper.get_action(event, agent).value for agent in state.actors}
         return player_actions
-
 
     @staticmethod
     def create_agent_specs(env: ParallelEnv):
@@ -493,8 +477,6 @@ class ParallelEnvironment(CogmentEnv):
         Returns:
             The agent specs dict.
         """
-        num_agents = len(env.possible_agents)
-
         # Check all observation and action spaces
 
         is_homogeneous = True

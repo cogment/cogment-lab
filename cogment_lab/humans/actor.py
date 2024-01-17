@@ -17,21 +17,20 @@ from __future__ import annotations
 import asyncio
 import base64
 import io
+import json
 import logging
 import multiprocessing as mp
 import os
 from typing import Any
-import json
-
-from jinja2 import Template
 
 import cogment
 import numpy as np
 import uvicorn
-from PIL import Image
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from jinja2 import Template
+from PIL import Image
 
 from cogment_lab.core import CogmentActor
 from cogment_lab.generated import cog_settings
@@ -92,7 +91,7 @@ async def start_fastapi(
             return HTMLResponse(rendered_html)
         elif file_override is not None and os.path.isfile(file_override):
             # Render HTML from file
-            with open(file_override, "r") as file:
+            with open(file_override) as file:
                 file_content = file.read()
             template = Template(file_content)
             rendered_html = template.render(**jinja_parameters)
@@ -105,7 +104,7 @@ async def start_fastapi(
     @app.websocket("/ws")
     async def websocket_endpoint(websocket: WebSocket):
         logging.info("Waiting for socket connection")
-        logging.info(f"Setting last_action_data")
+        logging.info("Setting last_action_data")
         last_action_data = "no-op"
         logging.info(f"Set {last_action_data=}")
         await websocket.accept()
@@ -168,7 +167,12 @@ class HumanPlayer(CogmentActor):
         return action
 
 
-async def run_cogment_actor(port: int, send_queue: asyncio.Queue, recv_queue: asyncio.Queue, signal_queue: mp.Queue):
+async def run_cogment_actor(
+    port: int,
+    send_queue: asyncio.Queue,
+    recv_queue: asyncio.Queue,
+    signal_queue: mp.Queue,
+):
     context = cogment.Context(cog_settings=cog_settings, user_id="cogment_lab")
 
     human_player = HumanPlayer(send_queue, recv_queue)

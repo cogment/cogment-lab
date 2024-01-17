@@ -15,20 +15,18 @@
 import asyncio
 import datetime
 
+import matplotlib.pyplot as plt
+from coltra import HomogeneousGroup
+from coltra.models import MLPModel
+from coltra.policy_optimization import CrowdPPOptimizer
+from tqdm import trange
+
+from cogment_lab.actors import ColtraActor
 from cogment_lab.envs.gymnasium import GymEnvironment
 from cogment_lab.process_manager import Cogment
 from cogment_lab.utils.coltra_utils import convert_trial_data_to_coltra
 from cogment_lab.utils.runners import process_cleanup
 from cogment_lab.utils.trial_utils import concatenate
-
-from coltra import HomogeneousGroup
-from coltra.models import MLPModel
-from coltra.policy_optimization import CrowdPPOptimizer
-
-from cogment_lab.actors import ColtraActor
-
-from tqdm import trange
-import matplotlib.pyplot as plt
 
 
 async def main():
@@ -63,7 +61,7 @@ async def main():
 
     actor = ColtraActor(model=model)
 
-    actor_task = cog.run_local_actor(actor=actor, actor_name="coltra", port=9021, log_file="actor.log")
+    cog.run_local_actor(actor=actor, actor_name="coltra", port=9021, log_file="actor.log")
 
     print("Actor started")
 

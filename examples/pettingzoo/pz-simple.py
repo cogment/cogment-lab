@@ -12,26 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import datetime
 import asyncio
+import datetime
 
-import matplotlib.pyplot as plt
-import numpy as np
-import torch
-import torch.nn.functional as F
-from coltra import HomogeneousGroup
-from coltra.buffers import Observation
-from coltra.models import MLPModel
-from coltra.policy_optimization import CrowdPPOptimizer
-from tqdm import trange
-
-from cogment_lab.actors import ColtraActor, ConstantActor
+from cogment_lab.actors import ConstantActor
 from cogment_lab.envs import AECEnvironment
-from cogment_lab.envs.gymnasium import GymEnvironment
 from cogment_lab.process_manager import Cogment
-from cogment_lab.utils.coltra_utils import convert_trial_data_to_coltra
-from cogment_lab.utils.runners import process_cleanup
-from cogment_lab.utils.trial_utils import concatenate
 
 
 async def main():
@@ -42,7 +28,9 @@ async def main():
     print(logpath)
 
     cenv = AECEnvironment(
-        env_path="pettingzoo.butterfly.cooperative_pong_v5.env", render=False, make_kwargs={"max_cycles": 20}
+        env_path="pettingzoo.butterfly.cooperative_pong_v5.env",
+        render=False,
+        make_kwargs={"max_cycles": 20},
     )
 
     await cog.run_env(env=cenv, env_name="pong", port=9011, log_file="env.log")
@@ -51,7 +39,12 @@ async def main():
 
     constant_actor = ConstantActor(1)
 
-    await cog.run_actor(actor=constant_actor, actor_name="constant", port=9022, log_file="actor-constant.log")
+    await cog.run_actor(
+        actor=constant_actor,
+        actor_name="constant",
+        port=9022,
+        log_file="actor-constant.log",
+    )
 
     # Estimate random agent performance
 

@@ -100,11 +100,11 @@ multi_line_output = 3
 
 [tool.pyright]
 include = ["cogment_lab/**", "tests/**"]
-exclude = ["**/node_modules", "**/__pycache__"]
+exclude = ["**/node_modules", "**/__pycache__", "cogment_lab/generated/**"]
 strict = []
 
 typeCheckingMode = "basic"
-pythonVersion = "3.7"
+pythonVersion = "3.8"
 pythonPlatform = "All"
 typeshedPath = "typeshed"
 enableTypeIgnoreComments = true
@@ -156,7 +156,8 @@ exclude = [
     "node_modules",
     "venv",
     "scripts",
-    "cogment_lab/generated"
+    "cogment_lab/generated",
+    "**/__init__.py",
 ]
 
 # Same as Black.
