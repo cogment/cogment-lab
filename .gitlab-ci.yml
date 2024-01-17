@@ -1,9 +1,70 @@
 stages:
-  - lint
+    - lint
+    - build
+    - publish
 
 licenses_checker:
-  stage: lint
-  image: registry.gitlab.com/ai-r/cogment/license-checker:latest
-  script:
-    - license-checker
+    stage: lint
+    image: registry.gitlab.com/ai-r/cogment/license-checker:latest
+    script:
+        - license-checker
 
+shellcheck:
+    image: koalaman/shellcheck-alpine:stable
+    stage: lint
+    before_script:
+        - shellcheck --version
+    script:
+        - shellcheck $(find . -name '*.sh' | xargs)
+
+shfmt:
+    image: mvdan/shfmt:v3.7.0-alpine
+    stage: lint
+    before_script:
+        - shfmt --version
+    script:
+        - shfmt -d .
+
+.base:
+    image: python:3.10
+    variables:
+        PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+    before_script:
+        - mkdir -p ${PIP_CACHE_DIR}
+        - python -m venv .venv
+        - source .venv/bin/activate
+        - pip install -r requirements.txt
+        - pip install -e .
+    cache:
+        - paths:
+              - .cache/pip
+        - key:
+              files:
+                  - requirements.txt
+                  - setup.cfg
+          paths:
+              - ".venv"
+
+build_sdist:
+    extends: .base
+    stage: build
+    script:
+        - echo "to be implemented"
+        # TODO
+        # - python -m build
+        # - twine check dist/*
+    artifacts:
+        expire_in: 1 week
+        paths:
+            - dist/*.tar.gz
+            - dist/*.whl
+
+publish_to_pypi:
+    extends: .base
+    stage: publish
+    needs:
+        - build_sdist
+    script:
+        - python -m twine upload dist/* --non-interactive -u $PYPI_USERNAME -p $PYPI_PASSWORD
+    rules:
+        - if: $CI_COMMIT_TAG

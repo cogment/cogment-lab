@@ -24,13 +24,13 @@ CWD = pathlib.Path(__file__).absolute().parent
 
 def get_version():
     """Gets the cogment_lab version."""
-    path = CWD / "cogment_lab" / "__init__.py"
+    path = CWD / "cogment_lab" / "version.py"
     content = path.read_text()
 
     for line in content.splitlines():
         if line.startswith("__version__"):
             return line.strip().split()[-1].strip().strip('"')
-    raise RuntimeError("bad version data in __init__.py")
+    raise RuntimeError("bad version data in 'cogment_lab/version.py'")
 
 
 def get_description():
