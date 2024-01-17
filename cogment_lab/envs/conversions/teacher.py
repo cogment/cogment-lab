@@ -14,6 +14,7 @@
 
 
 import gymnasium as gym
+import numpy as np
 from pettingzoo import AECEnv, ParallelEnv
 from pettingzoo.utils.agent_selector import agent_selector
 
@@ -102,6 +103,9 @@ class GymTeacherAEC(AECEnv):
     def render(self):
         img = self.gym_env.render()
         if self.override:
+            assert isinstance(
+                img, np.ndarray
+            ), "Gym environment must return a numpy array when rendering. Make sure you passed render_mode='rgb_array' to the environment."
             W, H, _ = img.shape
             N = 5
 
@@ -179,6 +183,9 @@ class GymTeacherParallel(ParallelEnv):
     def render(self):
         img = self.gym_env.render()
         if self.override:
+            assert isinstance(
+                img, np.ndarray
+            ), "Gym environment must return a numpy array when rendering. Make sure you passed render_mode='rgb_array' to the environment."
             W, H, _ = img.shape
             N = 5
 

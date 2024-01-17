@@ -176,13 +176,14 @@ async def format_data(
         # if len(samples) >= sample_count:
         #     break
 
-    data = extract_data_from_samples(samples, fields, agent_specs)
+    data = extract_data_from_samples(samples, agent_specs, fields)
 
     return data
 
 
 def extract_data_from_samples(
     samples: list[DatastoreSample],
+    agent_specs: AgentSpecs,
     fields: Sequence[str] = (
         "observations",
         "actions",
@@ -191,7 +192,6 @@ def extract_data_from_samples(
         "next_observations",
         "last_observation",
     ),
-    agent_specs: AgentSpecs | None = None,
     actor_name: str = "gym",
 ) -> TrialData:
     """
@@ -200,7 +200,7 @@ def extract_data_from_samples(
     Args:
         samples (list[DatastoreSample]): The samples to extract data from.
         fields (Sequence[str]): The fields to extract into the TrialData.
-        agent_specs (AgentSpecs | None): The environment specifications.
+        agent_specs (AgentSpecs): The agent specifications.
         actor_name (str): The name of the actor to extract data for.
 
     Returns:
@@ -256,7 +256,6 @@ def extract_data_from_samples(
 
 def extract_rewards_from_samples(
     samples: list[DatastoreSample],
-    agent_specs: AgentSpecs | None = None,
     actor_name: str = "gym",
 ) -> TrialData:
     """
@@ -264,7 +263,6 @@ def extract_rewards_from_samples(
 
     Args:
         samples (list[DatastoreSample]): The samples to extract rewards from.
-        agent_specs (AgentSpecs | None): The environment specifications.
         actor_name (str): The name of the actor to extract rewards for.
 
     Returns:
@@ -327,7 +325,7 @@ def concatenate(trial_data_list: list[TrialData]) -> TrialData:
     # Handle 'last_observation' separately
     last_trial = trial_data_list[-1]
     last_observation = (
-        last_trial.last_observation if last_trial.last_observation is not None else last_trial.next_observations[-1]
+        last_trial.last_observation if last_trial.last_observation is not None else last_trial.next_observations[-1]  # type: ignore
     )
 
     return TrialData(
@@ -407,12 +405,10 @@ async def format_data_multiagent(
 
     for actor_id, samples in actor_samples.items():
         actor_data[actor_id] = extract_data_from_samples(
-            samples, fields, actor_agent_specs[actor_id], actor_name=actor_id
+            samples, actor_agent_specs[actor_id], fields, actor_name=actor_id
         )
 
     for actor_id, reward_samples in actor_reward_samples.items():
-        actor_data[actor_id].rewards = extract_rewards_from_samples(
-            reward_samples, actor_agent_specs[actor_id], actor_name=actor_id
-        )
+        actor_data[actor_id].rewards = extract_rewards_from_samples(reward_samples, actor_name=actor_id)
 
     return actor_data

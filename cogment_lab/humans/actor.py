@@ -41,7 +41,7 @@ def image_to_msg(img: np.ndarray | None) -> str | None:
         return None
     img = Image.fromarray(img)
     img_byte_array = io.BytesIO()
-    img.save(img_byte_array, format="PNG")
+    img.save(img_byte_array, format="PNG")  # type: ignore
     base64_encoded_result_bytes = base64.b64encode(img_byte_array.getvalue())
     base64_encoded_result_str = base64_encoded_result_bytes.decode("ascii")
     return f"data:image/png;base64,{base64_encoded_result_str}"

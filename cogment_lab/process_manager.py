@@ -412,7 +412,7 @@ class Cogment:
                 logging.warning(f"Failed to stop process {name}: {e}")
 
         try:
-            await self.context._grpc_server.stop(None)
+            await self.context._grpc_server.stop(None)  # type: ignore
         except asyncio.exceptions.CancelledError:
             logging.info("Server already stopped")
         except AttributeError:

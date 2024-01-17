@@ -102,11 +102,9 @@ multi_line_output = 3
 include = ["cogment_lab/**", "tests/**"]
 exclude = ["**/node_modules", "**/__pycache__", "cogment_lab/generated/**"]
 strict = []
-
 typeCheckingMode = "basic"
-pythonVersion = "3.8"
+pythonVersion = "3.10"
 pythonPlatform = "All"
-typeshedPath = "typeshed"
 enableTypeIgnoreComments = true
 
 # This is required as the CI pre-commit does not download the module (i.e. numpy, pygame, box2d)
