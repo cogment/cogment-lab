@@ -26,7 +26,7 @@ dependencies = [
 cogmentlab = "cogment_lab.cli.cli:main"
 
 [tool.hatch.version]
-path = "cogment_lab/__init__.py"
+path = "cogment_lab/version.py"
 
 [tool.hatch.build.targets.sdist]
 include = ["/cogment_lab"]
