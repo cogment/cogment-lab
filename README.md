@@ -102,7 +102,7 @@ People having maintainers rights of the repository can follow these steps to rel
 
 1. Run `./scripts/create_release_branch.sh MAJOR.MINOR.PATCH`, this will automatically:
     - update the version of the package, in `cogment_lab/version.py`,
-    - create a release branch with this changes at `release/vMAJOR.MINOR.PATCH` and push it.
+    - create a release branch with the changes at `release/vMAJOR.MINOR.PATCH` and push it.
 2. On the release branch:
     - Make sure the changelog, at `CHANGELOG.md`, reflects the changes since the last release,
     - Fix any issue, making sure that the build passes on CI,
