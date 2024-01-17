@@ -1,4 +1,4 @@
-![cog-lab](https://github.com/RedTachyon/cogment_lab/assets/19414946/165557d0-fdf0-4d0a-99f1-3fc321fa194c)
+![cog-lab](https://github.com/cogment/cogment-lab/assets/19414946/5fb5f668-db74-45d8-8d36-e0c9bf886562)
 
 # Human + AI = ❤️
 
@@ -81,9 +81,10 @@ To run on M1/2/3 macs, you'll need to perform those additional steps
 ```
 pip uninstall grpcio grpcio-tools
 export GRPC_PYTHON_LDFLAGS=" -framework CoreFoundation"
-pip install grpcio==1.48.2 grpcio-tools==1.48.2 --no-binary :all:
+pip install grpcio==1.60.0 grpcio-tools==1.60.0 --no-binary :all:
 ```
 
+Adjust the version (here 1.60.0) to whatever you have installed.
 
 ## Usage
 
