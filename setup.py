@@ -30,7 +30,7 @@ def get_version():
     for line in content.splitlines():
         if line.startswith("__version__"):
             return line.strip().split()[-1].strip().strip('"')
-    raise RuntimeError("bad version data in __init__.py")
+    raise RuntimeError("bad version data in 'cogment_lab/version.py'")
 
 
 def get_description():

@@ -9,7 +9,7 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 max_line_length = 120
 
-[{*.py,*.yml}]
+[{*.py,*.yml,*.toml}]
 indent_size = 4
 
 [*.sh]

@@ -19,7 +19,7 @@ dependencies = [
     "numpy",
     "opencv-python>=4.8",
     "fastapi>=0.105",
-    "pillow>=9.0"
+    "pillow>=9.0",
 ]
 
 [project.scripts]
@@ -29,9 +29,7 @@ cogmentlab = "cogment_lab.cli.cli:main"
 path = "cogment_lab/__init__.py"
 
 [tool.hatch.build.targets.sdist]
-include = [
-    "/cogment_lab",
-]
+include = ["/cogment_lab"]
 
 # Package ######################################################################
 
@@ -56,16 +54,8 @@ dev = [
     "jupyter>=1.0.0",
     "jupyterlab>=3.5.3",
 ]
-coltra = [
-    "coltra>=0.2.1",
-    "torch",
-    "wandb>=0.13.9",
-]
-grid2op = [
-    "Grid2Op==1.9.6",
-    "lightsim2grid",
-    "numba==0.56.4",
-]
+coltra = ["coltra>=0.2.1", "torch", "wandb>=0.13.9"]
+grid2op = ["Grid2Op==1.9.6", "lightsim2grid", "numba==0.56.4"]
 
 [project.urls]
 Homepage = "https://cogment.ai/lab"
@@ -80,9 +70,10 @@ include-package-data = true
 include = ["cogment_lab", "cogment_lab.*"]
 
 [tool.setuptools.package-data]
-cogment_lab = [
-    "py.typed",
-]
+cogment_lab = ["py.typed"]
+
+[tool.setuptools.dynamic.version]
+attr = "cogment_lab.version.__version__"
 
 # Linters and Test tools #######################################################
 
@@ -121,8 +112,8 @@ reportInvalidTypeVarUse = "none"
 # reportUnknownParameterType = "warning"  # -> raises 1327 warnings
 # reportUnknownVariableType = "warning"  # -> raises 2585 warnings
 # reportUnknownArgumentType = "warning"  # -> raises 2104 warnings
-reportGeneralTypeIssues = "none"  # -> commented out raises 489 errors
-reportUntypedFunctionDecorator = "none"  # -> pytest.mark.parameterize issues
+reportGeneralTypeIssues = "none"        # -> commented out raises 489 errors
+reportUntypedFunctionDecorator = "none" # -> pytest.mark.parameterize issues
 
 reportPrivateUsage = "warning"
 reportUnboundVariable = "warning"
@@ -156,7 +147,7 @@ exclude = [
     "node_modules",
     "venv",
     "scripts",
-    "cogment_lab/generated"
+    "cogment_lab/generated",
 ]
 
 # Same as Black.
