@@ -21,7 +21,7 @@ shfmt:
     image: mvdan/shfmt:v3.7.0-alpine
     stage: lint
     before_script:
-        - shfmt -version
+        - shfmt --version
     script:
         - shfmt -d .
 
