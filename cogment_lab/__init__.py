@@ -13,14 +13,16 @@
 # limitations under the License.
 
 from __future__ import annotations
+
 import logging
 
-from cogment_lab.process_manager import Cogment
 from cogment.utils import logger
 
-logger.addHandler(logging.NullHandler())
+from cogment_lab.process_manager import Cogment
+from cogment_lab.version import __version__
 
-__version__ = "0.0.1"
+
+logger.addHandler(logging.NullHandler())
 
 
 __all__ = ["Cogment"]
