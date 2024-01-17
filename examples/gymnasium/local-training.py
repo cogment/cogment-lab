@@ -21,7 +21,7 @@ from coltra.models import MLPModel
 from coltra.policy_optimization import CrowdPPOptimizer
 from tqdm import trange
 
-from cogment_lab.actors import ColtraActor
+from cogment_lab.actors.nn_actor import ColtraActor
 from cogment_lab.envs.gymnasium import GymEnvironment
 from cogment_lab.process_manager import Cogment
 from cogment_lab.utils.coltra_utils import convert_trial_data_to_coltra
