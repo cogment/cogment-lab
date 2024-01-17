@@ -12,17 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
-import logging
-
-from cogment.utils import logger
-
-from cogment_lab.process_manager import Cogment
-from cogment_lab.version import __version__
-
-
-logger.addHandler(logging.NullHandler())
-
-
-__all__ = ["Cogment"]
+__version__ = "0.1.0"

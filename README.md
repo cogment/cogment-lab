@@ -95,3 +95,21 @@ Terminology:
 - Model: a relatively raw PyTorch (or other?) model, inheriting from `nn.Module`
 - Agent: a model wrapped in some utility class to interact with np arrays
 - Actor: a cogment service that may involve models and/or actors
+
+## Release process
+
+People having maintainers rights of the repository can follow these steps to release a version **MAJOR.MINOR.PATCH**. The versioning scheme follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+1. Run `./scripts/create_release_branch.sh MAJOR.MINOR.PATCH`, this will automatically:
+    - update the version of the package, in `cogment_lab/version.py`,
+    - create a release branch with this changes at `release/vMAJOR.MINOR.PATCH` and push it.
+2. On the release branch:
+    - Make sure the changelog, at `CHANGELOG.md`, reflects the changes since the last release,
+    - Fix any issue, making sure that te build passes on CI,
+    - Commit and push any changes.
+3. Run `./scripts/tag_release.sh MAJOR.MINOR.PATCH`, this will automatically:
+    - create the specific version section in the changelog and push it to the release branch,
+    - merge the release branch in `main`,
+    - create the release tag and,
+    - update the `develop` to match the latest release.
+4. The CI will automatically publish the package to PyPI.
