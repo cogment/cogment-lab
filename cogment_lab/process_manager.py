@@ -15,32 +15,35 @@
 from __future__ import annotations
 
 import asyncio
+import atexit
 import datetime
 import logging
+import multiprocessing as mp
 import os
 from asyncio import Task
 from collections.abc import Sequence
 from multiprocessing import Process, Queue
-from typing import Callable, Any, Coroutine
+from typing import Any, Callable, Coroutine
 
 import cogment
 
-from cogment_lab.core import BaseEnv, BaseActor
+from cogment_lab.actors.runner import actor_runner
+from cogment_lab.core import BaseActor, BaseEnv
+from cogment_lab.envs.runner import env_runner
 from cogment_lab.generated import cog_settings, data_pb2
 from cogment_lab.humans.runner import human_actor_runner
-from cogment_lab.actors.runner import actor_runner
-from cogment_lab.envs.runner import env_runner
+from cogment_lab.utils.trial_utils import (
+    TrialData,
+    format_data_multiagent,
+    get_actor_params,
+)
 
-import multiprocessing as mp
-import atexit
 
-from cogment_lab.utils.trial_utils import get_actor_params, format_data_multiagent, TrialData
-
-ORCHESTRATOR_ENDPOINT = f"grpc://localhost:9000"
-ENVIRONMENT_ENDPOINT = f"grpc://localhost:9001"
-RANDOM_AGENT_ENDPOINT = f"grpc://localhost:9002"
-HUMAN_AGENT_ENDPOINT = f"grpc://localhost:8999"
-DATASTORE_ENDPOINT = f"grpc://localhost:9003"
+ORCHESTRATOR_ENDPOINT = "grpc://localhost:9000"
+ENVIRONMENT_ENDPOINT = "grpc://localhost:9001"
+RANDOM_AGENT_ENDPOINT = "grpc://localhost:9002"
+HUMAN_AGENT_ENDPOINT = "grpc://localhost:8999"
+DATASTORE_ENDPOINT = "grpc://localhost:9003"
 
 
 AgentName = str
@@ -88,7 +91,12 @@ class Cogment:
         self.trial_envs: dict[TrialName, ImplName] = {}
 
     def _add_process(
-        self, target: Callable, args: tuple, name: ImplName, use_torch: bool | None = None, force: bool = False
+        self,
+        target: Callable,
+        args: tuple,
+        name: ImplName,
+        use_torch: bool | None = None,
+        force: bool = False,
     ):
         """Adds a process to the list of processes
 
@@ -135,7 +143,11 @@ class Cogment:
         return task
 
     def run_env(
-        self, env: BaseEnv, env_name: ImplName, port: int = 9001, log_file: str | None = None
+        self,
+        env: BaseEnv,
+        env_name: ImplName,
+        port: int = 9001,
+        log_file: str | None = None,
     ) -> Coroutine[bool]:
         """Given an environment, runs it in a subprocess
 
@@ -160,7 +172,15 @@ class Cogment:
         self._add_process(
             target=env_runner,
             name=env_name,
-            args=(env_class, env_args, env_kwargs, env_name, signal_queue, port, log_file),
+            args=(
+                env_class,
+                env_args,
+                env_kwargs,
+                env_name,
+                signal_queue,
+                port,
+                log_file,
+            ),
         )
         logging.info(f"Started environment {env_name} on port {port} with log file {log_file}")
 
@@ -170,7 +190,11 @@ class Cogment:
         return self.is_ready(signal_queue)
 
     def run_actor(
-        self, actor: BaseActor, actor_name: ImplName, port: int = 9002, log_file: str | None = None
+        self,
+        actor: BaseActor,
+        actor_name: ImplName,
+        port: int = 9002,
+        log_file: str | None = None,
     ) -> Coroutine[bool]:
         """Given an actor, runs it
 
@@ -195,7 +219,15 @@ class Cogment:
         self._add_process(
             target=actor_runner,
             name=actor_name,
-            args=(actor_class, actor_args, actor_kwargs, actor_name, signal_queue, port, log_file),
+            args=(
+                actor_class,
+                actor_args,
+                actor_kwargs,
+                actor_name,
+                signal_queue,
+                port,
+                log_file,
+            ),
         )
         logging.info(f"Started actor {actor_name} on port {port} with log file {log_file}")
 
@@ -205,7 +237,11 @@ class Cogment:
         return self.is_ready(signal_queue)
 
     def run_local_actor(
-        self, actor: BaseActor, actor_name: ImplName, port: int = 9002, log_file: str | None = None
+        self,
+        actor: BaseActor,
+        actor_name: ImplName,
+        port: int = 9002,
+        log_file: str | None = None,
     ) -> Task:
         """Given an actor, runs it locally
 
@@ -224,7 +260,10 @@ class Cogment:
 
         self.context.register_actor(impl=actor.impl, impl_name=actor_name, actor_classes=["player"])
 
-        serve = self._add_task(self.context.serve_all_registered(cogment.ServedEndpoint(port=port)), actor_name)
+        serve = self._add_task(
+            self.context.serve_all_registered(cogment.ServedEndpoint(port=port)),
+            actor_name,
+        )
 
         logging.info(f"Started actor {actor_name} on port {port} with log file {log_file}")
 
@@ -373,7 +412,7 @@ class Cogment:
                 logging.warning(f"Failed to stop process {name}: {e}")
 
         try:
-            await self.context._grpc_server.stop(None)
+            await self.context._grpc_server.stop(None)  # type: ignore
         except asyncio.exceptions.CancelledError:
             logging.info("Server already stopped")
         except AttributeError:

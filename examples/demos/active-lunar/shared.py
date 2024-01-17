@@ -12,12 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import hashlib
+
 import numpy as np
 import torch
 from torch import nn
-import hashlib
 
 from cogment_lab import Cogment
+
 
 EPS_INIT = 0.9
 EPS_FINAL = 0.001
@@ -38,7 +40,14 @@ class ReplayBuffer:
         self.next_states = np.zeros((capacity, obs_size), dtype=np.float32)
         self.dones = np.zeros(capacity, dtype=np.float32)
 
-    def push(self, state: np.ndarray, action: int, reward: float, next_state: np.ndarray, done: float):
+    def push(
+        self,
+        state: np.ndarray,
+        action: int,
+        reward: float,
+        next_state: np.ndarray,
+        done: float,
+    ):
         index = self.buffer_counter % self.capacity
 
         self.states[index] = state
@@ -66,7 +75,10 @@ class ReplayBuffer:
 
 
 def get_current_eps(
-    current_step: int, eps_start: float = EPS_INIT, eps_final: float = EPS_FINAL, eps_decay_duration: int = EPS_DECAY
+    current_step: int,
+    eps_start: float = EPS_INIT,
+    eps_final: float = EPS_FINAL,
+    eps_decay_duration: int = EPS_DECAY,
 ) -> float:
     """
     Calculate the epsilon value for epsilon-greedy exploration in DQN.
@@ -129,7 +141,9 @@ async def evaluate_model(
 
     for ep in range(num_episodes):
         trial_id = await cog.start_trial(
-            env_name=env_name, actor_impls=actor_impls, session_config={"render": False, "seed": 10_000 + ep}
+            env_name=env_name,
+            actor_impls=actor_impls,
+            session_config={"render": False, "seed": 10_000 + ep},
         )
 
         trial_data = await cog.get_trial_data(trial_id)

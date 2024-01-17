@@ -15,6 +15,7 @@
 import cv2
 import numpy as np
 
+
 MAX_RENDERED_WIDTH = 2048
 
 

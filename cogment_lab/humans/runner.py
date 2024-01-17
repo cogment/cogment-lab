@@ -19,7 +19,7 @@ import signal
 from multiprocessing import Queue
 from typing import Any
 
-from cogment_lab.humans.actor import start_fastapi, run_cogment_actor
+from cogment_lab.humans.actor import run_cogment_actor, start_fastapi
 from cogment_lab.utils.runners import setup_logging
 
 
@@ -82,7 +82,10 @@ async def human_actor_main(
     )
     cogment_task = asyncio.create_task(
         run_cogment_actor(
-            port=cogment_port, send_queue=actor_to_app, recv_queue=app_to_actor, signal_queue=signal_queue
+            port=cogment_port,
+            send_queue=actor_to_app,
+            recv_queue=app_to_actor,
+            signal_queue=signal_queue,
         )
     )
 
@@ -111,7 +114,14 @@ def human_actor_runner(
     try:
         loop.run_until_complete(
             human_actor_main(
-                app_port, cogment_port, signal_queue, actions, fps, html_override, file_override, jinja_parameters
+                app_port,
+                cogment_port,
+                signal_queue,
+                actions,
+                fps,
+                html_override,
+                file_override,
+                jinja_parameters,
             )
         )
     finally:

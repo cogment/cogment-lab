@@ -26,6 +26,7 @@ from cogment_lab.core import CogmentEnv, State
 from cogment_lab.session_helpers import EnvironmentSessionHelper
 from cogment_lab.specs import AgentSpecs
 
+
 log = logging.getLogger(__name__)
 
 # configure pygame to use a dummy video server to be able to render headlessly
@@ -236,7 +237,10 @@ class GymEnvironment(CogmentEnv):
         logging.info(f"Step returned {obs=}, {reward=}, {terminated=}, {truncated=}, {info=}")
 
         observation = state.observation_space.create_serialize(
-            value=obs, rendered_frame=state.env.render() if state.session_cfg.render else None, active=True, alive=True
+            value=obs,
+            rendered_frame=state.env.render() if state.session_cfg.render else None,
+            active=True,
+            alive=True,
         )
 
         # observations = [("*", observation)]

@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
 import numpy as np
 import pytest
 
@@ -34,7 +32,12 @@ async def test_pong():
 
     constant_actor = ConstantActor(1)
 
-    await cog.run_actor(actor=constant_actor, actor_name="constant", port=9022, log_file="actor-constant.log")
+    await cog.run_actor(
+        actor=constant_actor,
+        actor_name="constant",
+        port=9022,
+        log_file="actor-constant.log",
+    )
 
     trial_id = await cog.start_trial(
         env_name="pong",

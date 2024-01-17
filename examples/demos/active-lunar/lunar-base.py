@@ -20,16 +20,15 @@ import numpy as np
 import torch
 import wandb
 from coltra.models import FCNetwork
+from shared import ReplayBuffer, dqn_loss, get_current_eps
 from torch import optim
 from tqdm import trange
 from typarse import BaseParser
 
-from cogment_lab.actors import ConstantActor
-from cogment_lab.actors.nn_actor import NNActor, BoltzmannActor
-from cogment_lab.envs import AECEnvironment, GymEnvironment
+from cogment_lab.actors.nn_actor import NNActor
+from cogment_lab.envs import GymEnvironment
 from cogment_lab.process_manager import Cogment
 from cogment_lab.utils.runners import process_cleanup
-from shared import ReplayBuffer, get_current_eps, dqn_loss
 
 
 class Parser(BaseParser):
@@ -44,6 +43,7 @@ class Parser(BaseParser):
     learning_rate: float = 6.3e-4
     num_episodes: int = 500
     seed: int = 0
+
 
 async def main():
     args = Parser()
@@ -68,7 +68,6 @@ async def main():
 
     cog = Cogment(log_dir=logpath)
 
-
     cenv = GymEnvironment(env_id=args.env_name, reinitialize=True, render=True)
 
     obs_len = cenv.env.observation_space.shape[0]
@@ -81,7 +80,10 @@ async def main():
 
     # Run the agent
     network = FCNetwork(
-        input_size=obs_len, output_sizes=[cenv.env.action_space.n], hidden_sizes=[256, 256], activation="tanh"
+        input_size=obs_len,
+        output_sizes=[cenv.env.action_space.n],
+        hidden_sizes=[256, 256],
+        activation="tanh",
     )
 
     actor = NNActor(network, "cpu")
@@ -97,9 +99,10 @@ async def main():
         if episode == args.human_episodes:
             cog.stop_service("lunar")
 
-
         trial_id = await cog.start_trial(
-            env_name="lunar", actor_impls={"gym": "dqn"}, session_config={"render": True, "seed": episode}
+            env_name="lunar",
+            actor_impls={"gym": "dqn"},
+            session_config={"render": True, "seed": episode},
         )
 
         trial_data_task = asyncio.create_task(cog.get_trial_data(trial_id))

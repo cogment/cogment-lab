@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .simple import RandomActor, ConstantActor
+from .simple import ConstantActor, RandomActor

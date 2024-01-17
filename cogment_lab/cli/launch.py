@@ -37,7 +37,13 @@ def launch_main(command: str):
     if "base" in services:
         services_to_run = ["orchestrator", "trial_datastore"]
     elif "all" in services:
-        services_to_run = ["orchestrator", "trial_datastore", "model_registry", "directory", "web_proxy"]
+        services_to_run = [
+            "orchestrator",
+            "trial_datastore",
+            "model_registry",
+            "directory",
+            "web_proxy",
+        ]
     else:
         services_to_run = services
 
