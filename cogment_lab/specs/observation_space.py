@@ -118,7 +118,7 @@ class Observation:
         return self._pb_observation.alive if self._pb_observation.alive != b"" else self._alive
 
     def __repr__(self):
-        return f"Observation(value={self.value.shape if isinstance(self.value, np.ndarray) else self.value}, active={self.active}, alive={self.alive}, rendered_frame={self.rendered_frame.shape if self.rendered_frame is not None else 'None'})@{hex(id(self))}"
+        return f"Observation(value={self.value.shape if isinstance(self.value, np.ndarray) else self.value}, active={self.active}, alive={self.alive}, rendered_frame={self.rendered_frame.shape if self.rendered_frame is not None else 'None'})@{hex(id(self))}"  # type: ignore
 
     def __str__(self):
         return self.__repr__()
