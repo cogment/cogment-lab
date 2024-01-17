@@ -18,12 +18,12 @@ shellcheck:
         - shellcheck $(find . -name '*.sh' | xargs)
 
 shfmt:
-    image: mvdan/shfmt:v3.1.0-alpine
+    image: mvdan/shfmt:v3.7.0-alpine
     stage: lint
     before_script:
         - shfmt -version
     script:
-        - shfmt -i 2 -ci -d .
+        - shfmt -d .
 
 .base:
     image: python:3.10

@@ -12,6 +12,9 @@ max_line_length = 120
 [{*.py,*.yml}]
 indent_size = 4
 
+[*.sh]
+switch_case_indent = true
+
 # Ignore the entire ".venv" directory.
 [.venv/**]
 ignore = true

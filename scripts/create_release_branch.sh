@@ -30,29 +30,29 @@ dry_run=0
 
 while [[ "$1" != "" ]]; do
   case $1 in
-  --dry-run)
-    dry_run=1
-    ;;
-  --help | -h)
-    usage
-    exit 0
-    ;;
-  *)
-    if [[ -z "${version}" ]]; then
-      input_version=$1
-      validated_version=$(validate_version "${input_version}")
-      if [[ -z "${validated_version}" ]]; then
-        printf "%s: provided version is invalid.\n\n" "${input_version}"
+    --dry-run)
+      dry_run=1
+      ;;
+    --help | -h)
+      usage
+      exit 0
+      ;;
+    *)
+      if [[ -z "${version}" ]]; then
+        input_version=$1
+        validated_version=$(validate_version "${input_version}")
+        if [[ -z "${validated_version}" ]]; then
+          printf "%s: provided version is invalid.\n\n" "${input_version}"
+          usage
+          exit 1
+        fi
+        version="${validated_version}"
+      else
+        printf "%s: unrecognized argument.\n\n" "$1"
         usage
         exit 1
       fi
-      version="${validated_version}"
-    else
-      printf "%s: unrecognized argument.\n\n" "$1"
-      usage
-      exit 1
-    fi
-    ;;
+      ;;
   esac
   shift
 done
