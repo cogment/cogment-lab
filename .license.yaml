@@ -4,3 +4,4 @@ license:
   ignore:
     - "**/.venv"
     - "**/cog_settings.py"
+    - "**/__init__.py"  # Has problems with newlines

@@ -78,16 +78,20 @@ def deserialize_space(pb_space: Space) -> gym.Space:
         box_space_pb = pb_space.box
         low = deserialize_ndarray(box_space_pb.low)
         high = deserialize_ndarray(box_space_pb.high)
+        assert low is not None
+        assert high is not None
         return gym.spaces.Box(low=low, high=high, shape=low.shape, dtype=low.dtype)
     if space_kind == "multi_binary":
         multi_binary_space_pb = pb_space.multi_binary
         size = deserialize_ndarray(multi_binary_space_pb.n)
+        assert size is not None
         if size.size > 1:
             return gym.spaces.MultiBinary(n=size)
         return gym.spaces.MultiBinary(n=size[0])
     if space_kind == "multi_discrete":
         multi_discrete_space_pb = pb_space.multi_discrete
         nvec = deserialize_ndarray(multi_discrete_space_pb.nvec)
+        assert nvec is not None
         return gym.spaces.MultiDiscrete(nvec=nvec)
     if space_kind == "dict":
         dict_space_pb = pb_space.dict

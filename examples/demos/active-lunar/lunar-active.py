@@ -20,16 +20,15 @@ import numpy as np
 import torch
 import wandb
 from coltra.models import FCNetwork
+from shared import ReplayBuffer, dqn_loss, get_current_eps
 from torch import optim
 from tqdm import trange
 from typarse import BaseParser
 
-from cogment_lab.actors import ConstantActor
-from cogment_lab.actors.nn_actor import NNActor, BoltzmannActor
+from cogment_lab.actors.nn_actor import NNActor
 from cogment_lab.envs import AECEnvironment, GymEnvironment
 from cogment_lab.process_manager import Cogment
 from cogment_lab.utils.runners import process_cleanup
-from shared import ReplayBuffer, get_current_eps, dqn_loss
 
 
 class Parser(BaseParser):
@@ -73,7 +72,11 @@ async def main():
 
     cenv = AECEnvironment(
         env_path="cogment_lab.envs.conversions.teacher.GymTeacherAEC",
-        make_kwargs={"gym_env_name": args.env_name, "gym_make_kwargs": {}, "render_mode": "rgb_array"},
+        make_kwargs={
+            "gym_env_name": args.env_name,
+            "gym_make_kwargs": {},
+            "render_mode": "rgb_array",
+        },
         render=True,
         reinitialize=True,
     )
@@ -92,7 +95,10 @@ async def main():
 
     # Run the agent
     network = FCNetwork(
-        input_size=obs_len, output_sizes=[cenv.env.action_space("gym").n], hidden_sizes=[256, 256], activation="tanh"
+        input_size=obs_len,
+        output_sizes=[cenv.env.action_space("gym").n],
+        hidden_sizes=[256, 256],
+        activation="tanh",
     )
 
     actor = NNActor(network, "cpu")
@@ -113,7 +119,7 @@ async def main():
 
     await cog.run_web_ui(actions=actions, log_file="human.log", fps=60)
 
-    print(f"Launched web UI at http://localhost:8000")
+    print("Launched web UI at http://localhost:8000")
 
     total_timesteps = 0
     ep_rewards = []
@@ -131,16 +137,16 @@ async def main():
             )
         else:
             trial_id = await cog.start_trial(
-                env_name="lunar-single", actor_impls={"gym": "dqn"}, session_config={"render": True, "seed": episode}
+                env_name="lunar-single",
+                actor_impls={"gym": "dqn"},
+                session_config={"render": True, "seed": episode},
             )
 
         trial_data_task = asyncio.create_task(cog.get_trial_data(trial_id))
 
         gradient_updates = 0
 
-
         trial_data = await trial_data_task
-
 
         # Logging
         dqn_data = trial_data["gym"]
@@ -165,7 +171,6 @@ async def main():
                 human_action = 0
 
             action = human_action if human_active == 1 else dqn_action
-
 
             reward = dqn_data.rewards[t]
             next_state = dqn_data.next_observations[t]

@@ -39,7 +39,12 @@ async def main():
 
     constant_actor = ConstantActor(1)
 
-    await cog.run_actor(actor=constant_actor, actor_name="constant", port=9022, log_file="actor-constant.log")
+    await cog.run_actor(
+        actor=constant_actor,
+        actor_name="constant",
+        port=9022,
+        log_file="actor-constant.log",
+    )
 
     # Estimate random agent performance
 

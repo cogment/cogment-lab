@@ -14,16 +14,16 @@
 
 from __future__ import annotations
 
-from typing import Optional, Any
+from typing import Any
 
 from cogment.actor import ActorSession
 from cogment.environment import EnvironmentSession
 from cogment.model_registry_v2 import ModelRegistry
-from cogment.session import RecvEvent, ActorInfo
+from cogment.session import ActorInfo, RecvEvent
 
 from cogment_lab.specs import AgentSpecs
-from cogment_lab.specs.action_space import ActionSpace, Action
-from cogment_lab.specs.observation_space import ObservationSpace, Observation
+from cogment_lab.specs.action_space import Action, ActionSpace
+from cogment_lab.specs.observation_space import Observation, ObservationSpace
 
 
 class ActorSessionHelper:
@@ -33,7 +33,7 @@ class ActorSessionHelper:
     Provides additional methods to the regular Cogment actor session.
     """
 
-    def __init__(self, actor_session: ActorSession, model_registry: Optional[ModelRegistry]):
+    def __init__(self, actor_session: ActorSession, model_registry: ModelRegistry | None):
         self.actor_session = actor_session
         self.agent_specs = AgentSpecs.deserialize(self.actor_session.config.agent_specs)
         self.action_space = self.agent_specs.get_action_space(seed=self.actor_session.config.seed)
@@ -76,12 +76,16 @@ class EnvironmentSessionHelper:
 
     actor_infos: list[ActorInfo]
 
-    def __init__(self, environment_session: EnvironmentSession, agent_specs: dict[str, AgentSpecs]):
+    def __init__(
+        self,
+        environment_session: EnvironmentSession,
+        agent_specs: dict[str, AgentSpecs],
+    ):
         self.actor_infos = environment_session.get_active_actors()
 
-        assert set(agent_specs.keys()) == set(
+        assert set(agent_specs.keys()) == {
             actor_info.actor_name for actor_info in self.actor_infos
-        ), f"Agent specs and active actors do not match. {agent_specs.keys()} != {self.actor_infos}"
+        }, f"Agent specs and active actors do not match. {agent_specs.keys()} != {self.actor_infos}"
 
         # Mapping actor_name to actor_idx
         self.actor_idxs = {actor_info.actor_name: actor_idx for (actor_idx, actor_info) in enumerate(self.actor_infos)}

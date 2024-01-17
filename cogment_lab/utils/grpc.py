@@ -14,9 +14,9 @@
 
 from __future__ import annotations
 
-from cogment_lab.core import Observation
-from cogment_lab.generated import data_pb2
 from google.protobuf.json_format import ParseDict
+
+from cogment_lab.generated import data_pb2
 
 
 def extend_actor_config(
@@ -87,6 +87,8 @@ def get_env_config(
     Returns:
         An EnvironmentConfig protobuf message.
     """
+    if reset_args_dict is None:
+        reset_args_dict = {}
     env_config = data_pb2.EnvironmentConfig()
 
     env_config.run_id = run_id

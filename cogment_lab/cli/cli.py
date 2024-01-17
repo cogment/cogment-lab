@@ -20,6 +20,7 @@ import os
 import subprocess
 import sys
 
+
 TEAL = "\033[36m"
 RESET = "\033[0m"
 
@@ -91,16 +92,8 @@ def main():
         from cogment_lab.cli import launch
 
         launch.launch_main(args.file)
-    elif args.command == "env":
-        from cogment_lab.cli import env
-
-        env.env_main(args.file)
-    elif args.command == "actor":
-        from cogment_lab.cli import actor
-
-        actor.actor_main(args.file)
     else:
-        print("Invalid command. Use 'launch', 'env', 'actor' or `install`.")
+        print("Invalid command. Use 'launch' or `install`.")
 
 
 if __name__ == "__main__":

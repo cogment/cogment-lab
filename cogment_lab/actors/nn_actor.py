@@ -14,12 +14,12 @@
 
 import numpy as np
 import torch
+from coltra import CAgent, DAgent, Observation
+from coltra.models import BaseModel
 from torch import nn
 from torch.nn import functional as F
 
 from cogment_lab.core import CogmentActor
-from coltra import Observation, DAgent, CAgent
-from coltra.models import BaseModel
 
 
 class ColtraActor(CogmentActor):

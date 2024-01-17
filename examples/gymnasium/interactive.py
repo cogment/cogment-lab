@@ -15,10 +15,9 @@
 import asyncio
 import datetime
 
-from cogment_lab.actors import RandomActor, ConstantActor
+from cogment_lab.actors import ConstantActor, RandomActor
 from cogment_lab.envs.gymnasium import GymEnvironment
 from cogment_lab.process_manager import Cogment
-from cogment_lab.utils.runners import process_cleanup
 from cogment_lab.utils.trial_utils import format_data_multiagent
 
 
@@ -46,7 +45,12 @@ async def main():
 
     await cog.run_actor(actor=random_actor, actor_name="random", port=9021, log_file="actor-random.log")
 
-    await cog.run_actor(actor=constant_actor, actor_name="constant", port=9022, log_file="actor-constant.log")
+    await cog.run_actor(
+        actor=constant_actor,
+        actor_name="constant",
+        port=9022,
+        log_file="actor-constant.log",
+    )
 
     # Start a trial
 

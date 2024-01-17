@@ -16,9 +16,10 @@ import asyncio
 import datetime
 
 from cogment_lab import Cogment
-from cogment_lab.actors import RandomActor, ConstantActor
+from cogment_lab.actors import ConstantActor, RandomActor
 from cogment_lab.envs import GymEnvironment
 from cogment_lab.utils.runners import process_cleanup
+
 
 LUNAR_LANDER_ACTIONS = ["no-op", "ArrowRight", "ArrowUp", "ArrowLeft"]
 
@@ -34,7 +35,7 @@ async def main():
     # Launch the environment
     env = GymEnvironment(
         env_id="LunarLander-v2",  # ID of a Gymnasium environment
-        render=True,  #  True if we want to see the rendering at some point
+        render=True,  # True if we want to see the rendering at some point
     )
 
     await cog.run_env(

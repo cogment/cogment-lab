@@ -14,9 +14,8 @@
 
 import gymnasium as gym
 
-from cogment_lab.generated.data_pb2 import (  # pylint: disable=import-error
-    PlayerAction,
-)
+from cogment_lab.generated.data_pb2 import PlayerAction  # pylint: disable=import-error
+
 from .ndarray_serialization import deserialize_ndarray, serialize_ndarray
 
 

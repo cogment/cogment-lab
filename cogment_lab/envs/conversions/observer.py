@@ -23,7 +23,12 @@ from pettingzoo.utils.agent_selector import agent_selector
 class GymObserverAEC(AECEnv):
     metadata = {"render_modes": ["rgb_array"], "name": "GymWithObserverEnv"}
 
-    def __init__(self, gym_env_name: str, gym_make_kwargs: dict = {}, render_mode: str | None = None):
+    def __init__(
+        self,
+        gym_env_name: str,
+        gym_make_kwargs: dict = {},
+        render_mode: str | None = None,
+    ):
         super().__init__()
         logging.info(
             f"Creating GymObserverAEC with gym_env_name={gym_env_name}, gym_make_kwargs={gym_make_kwargs}, render_mode={render_mode}"
@@ -33,7 +38,10 @@ class GymObserverAEC(AECEnv):
         self.observation_spaces = {
             "gym": self.gym_env.observation_space,
             "observer": gym.spaces.Dict(
-                {"observation": self.gym_env.observation_space, "action": self.gym_env.action_space}
+                {
+                    "observation": self.gym_env.observation_space,
+                    "action": self.gym_env.action_space,
+                }
             ),
         }
         self.action_spaces = {
@@ -99,10 +107,16 @@ class GymObserverAEC(AECEnv):
     def action_space(self, agent: str):
         return self.action_spaces[agent]
 
+
 class GymObserverParallel(ParallelEnv):
     metadata = {"render_modes": ["rgb_array"], "name": "GymWithObserverEnv"}
 
-    def __init__(self, gym_env_name: str, gym_make_kwargs: dict = {}, render_mode: str | None = None):
+    def __init__(
+        self,
+        gym_env_name: str,
+        gym_make_kwargs: dict = {},
+        render_mode: str | None = None,
+    ):
         super().__init__()
         logging.info(
             f"Creating GymObserverParallel with gym_env_name={gym_env_name}, gym_make_kwargs={gym_make_kwargs}, render_mode={render_mode}"
@@ -111,7 +125,7 @@ class GymObserverParallel(ParallelEnv):
         self.possible_agents = ["gym", "observer"]
         self.observation_spaces = {
             "gym": self.gym_env.observation_space,
-            "observer": self.gym_env.observation_space
+            "observer": self.gym_env.observation_space,
         }
         self.action_spaces = {
             "gym": self.gym_env.action_space,
@@ -129,7 +143,6 @@ class GymObserverParallel(ParallelEnv):
         observations = {"gym": obs, "observer": obs}
 
         return observations, infos
-
 
     def step(self, action: dict[str, Any]):
         logging.info(f"Stepping GymObserverParallel with action={action}")

@@ -50,7 +50,7 @@ If you are familiar with async programming, there's a lot of interesting things 
 ## Terminology
 
 - A `service` is anything that interacts with the Cogment orchestrator. It can be an environment or an actor, including human actors.
-- An `actor` in particular is the service that interacts with an environment, and ofter wraps an `agent`. The internal structure of an actor is entirely up to the user
+- An `actor` in particular is the service that interacts with an environment, and often wraps an `agent`. The internal structure of an actor is entirely up to the user
 - An `agent` is what we typically think of as an agent in RL - something that perceives its environment and acts upon it. We do not attempt to solve the agent foundation problem in this documentation.
 - An `agent` is simultaneously the part of the environment that's taking an action - multiagent environments may have several agents, so we need to assign an actor to each agent.
 
@@ -63,7 +63,7 @@ If you are familiar with async programming, there's a lot of interesting things 
 ## Local installation
 
 - Requires Python 3.10
-- Install requirements in a virtual env with somthing similar to the following
+- Install requirements in a virtual env with something similar to the following
 
     ```console
     $ python -m venv .venv
@@ -102,10 +102,10 @@ People having maintainers rights of the repository can follow these steps to rel
 
 1. Run `./scripts/create_release_branch.sh MAJOR.MINOR.PATCH`, this will automatically:
     - update the version of the package, in `cogment_lab/version.py`,
-    - create a release branch with this changes at `release/vMAJOR.MINOR.PATCH` and push it.
+    - create a release branch with the changes at `release/vMAJOR.MINOR.PATCH` and push it.
 2. On the release branch:
     - Make sure the changelog, at `CHANGELOG.md`, reflects the changes since the last release,
-    - Fix any issue, making sure that te build passes on CI,
+    - Fix any issue, making sure that the build passes on CI,
     - Commit and push any changes.
 3. Run `./scripts/tag_release.sh MAJOR.MINOR.PATCH`, this will automatically:
     - create the specific version section in the changelog and push it to the release branch,
