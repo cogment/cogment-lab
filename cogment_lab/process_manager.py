@@ -39,13 +39,6 @@ from cogment_lab.utils.trial_utils import (
 )
 
 
-ORCHESTRATOR_ENDPOINT = "grpc://localhost:9000"
-ENVIRONMENT_ENDPOINT = "grpc://localhost:9001"
-RANDOM_AGENT_ENDPOINT = "grpc://localhost:9002"
-HUMAN_AGENT_ENDPOINT = "grpc://localhost:8999"
-DATASTORE_ENDPOINT = "grpc://localhost:9003"
-
-
 AgentName = str
 ImplName = str
 TrialName = str
@@ -60,6 +53,8 @@ class Cogment:
         torch_mode: bool = False,
         log_dir: str | None = None,
         mp_method: str | None = None,
+        orchestrator_port: int = 9000,
+        datastore_port: int = 9003,
     ):
         """Initializes the Cogment instance
 
@@ -79,9 +74,12 @@ class Cogment:
         self.envs: dict[ImplName, BaseEnv] = {}
         self.actors: dict[ImplName, BaseActor] = {}
 
+        self.orchestrator_endpoint = f"grpc://localhost:{orchestrator_port}"
+        self.datastore_endpoint = f"grpc://localhost:{datastore_port}"
+
         self.context = cogment.Context(cog_settings=cog_settings, user_id=user_id)
-        self.controller = self.context.get_controller(endpoint=cogment.Endpoint(ORCHESTRATOR_ENDPOINT))
-        self.datastore = self.context.get_datastore(endpoint=cogment.Endpoint(DATASTORE_ENDPOINT))
+        self.controller = self.context.get_controller(endpoint=cogment.Endpoint(self.orchestrator_endpoint))
+        self.datastore = self.context.get_datastore(endpoint=cogment.Endpoint(self.datastore_endpoint))
 
         self.env_ports: dict[ImplName, int] = {}
         self.actor_ports: dict[ImplName, int] = {}
@@ -466,7 +464,7 @@ class Cogment:
             environment_config=env_config,
             actors=actor_params,
             environment_implementation=env_name,
-            datalog_endpoint=DATASTORE_ENDPOINT,
+            datalog_endpoint=self.datastore_endpoint,
         )
 
         trial_id = await self.controller.start_trial(trial_id_requested=trial_name, trial_params=trial_params)

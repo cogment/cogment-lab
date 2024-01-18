@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+- Added guided tutorial notebooks
+- Added an option to customize the orchestrator and datastore ports
+- Added ParallelEnvironment as a default export from envs
+- Added a placeholder image for the web UI
+- Updated the uvicorn dependency to require the [standard] option
+
 ## v0.1.0 - 2024-01-17
 
 ### Added
