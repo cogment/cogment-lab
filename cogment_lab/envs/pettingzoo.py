@@ -429,7 +429,6 @@ class ParallelEnvironment(CogmentEnv):
         """
         logging.info("Stepping environment")
 
-        state.env.step(action)
         obs, rewards, terminated, truncated, info = state.env.step(action)
 
         frame = state.env.render() if state.session_cfg.render else None

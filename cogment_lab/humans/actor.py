@@ -157,11 +157,11 @@ class HumanPlayer(CogmentActor):
         self.recv_queue = recv_queue
 
     async def act(self, observation: Any, rendered_frame: np.ndarray | None = None) -> int:
-        logging.info(
-            f"Getting an action with {observation=}" + f" and {rendered_frame.shape=}"
-            if rendered_frame is not None
-            else "no frame"
-        )
+        # logging.info(
+        #     f"Getting an action with {observation=}" + f" and {rendered_frame.shape=}"
+        #     if rendered_frame is not None
+        #     else "no frame"
+        # )
         await self.send_queue.put(rendered_frame)
         action = await self.recv_queue.get()
         return action
