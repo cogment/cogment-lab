@@ -14,7 +14,7 @@ dependencies = [
     "grpcio-tools>=1.48",
     "PyYAML>=5.0",
     "starlette>=0.21.0",
-    "uvicorn>=0.17.6",
+    "uvicorn[standard]>=0.17.6",
     "Gymnasium[classic_control]~=0.29",
     "PettingZoo~=1.23.1",
     "numpy",
