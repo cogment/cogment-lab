@@ -99,7 +99,7 @@ class Observation:
         return self._value
 
     def _deserialize_rendered_frame(self):
-        if not self._pb_observation.rendered_frame != b"":
+        if self._pb_observation.rendered_frame == b"" or self._pb_observation.rendered_frame is None:
             return None
         return decode_rendered_frame(self._pb_observation.rendered_frame)
 
