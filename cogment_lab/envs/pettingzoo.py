@@ -21,7 +21,7 @@ from cogment.session import RecvEvent
 from pettingzoo import AECEnv, ParallelEnv
 
 from cogment_lab.core import CogmentEnv, State
-from cogment_lab.generated.data_pb2 import Observation as PbObservation
+from cogment_lab.generated.data_pb2 import Observation as PbObservation  # type: ignore
 from cogment_lab.session_helpers import EnvironmentSessionHelper
 from cogment_lab.specs import AgentSpecs
 from cogment_lab.utils import import_object
@@ -42,7 +42,7 @@ class AECEnvironment(CogmentEnv):
         self,
         env_path: str,
         make_kwargs: dict | None = None,
-        reset_options: dict = None,
+        reset_options: dict | None = None,
         render: bool = False,
         reinitialize: bool = False,
         dry: bool = False,
@@ -91,7 +91,7 @@ class AECEnvironment(CogmentEnv):
             self.env: AECEnv = self.env_maker(**self.make_args)
             self.agent_specs = self.create_agent_specs(self.env)
         else:
-            self.env = None
+            self.env = AECEnv()
             self.agent_specs = {}
 
         self.initialized = False
@@ -221,7 +221,7 @@ class AECEnvironment(CogmentEnv):
 
     @staticmethod
     def fill_observations_(
-        state: State, observations: dict[str, PbObservation], frame: np.ndarray
+        state: State, observations: dict[str, PbObservation], frame: np.ndarray | None
     ) -> dict[str, PbObservation]:
         """
         Fill in any missing observations with the default observation. Mutates the observations dict.
@@ -229,6 +229,7 @@ class AECEnvironment(CogmentEnv):
         Args:
             state: The Cogment state.
             observations: The observations dict.
+            frame: The rendered frame.
 
         Returns:
             The filled observations dict.
@@ -292,7 +293,7 @@ class ParallelEnvironment(CogmentEnv):
         self,
         env_path: str,
         make_kwargs: dict | None = None,
-        reset_options: dict = None,
+        reset_options: dict | None = None,
         render: bool = False,
         reinitialize: bool = False,
         dry: bool = False,
@@ -341,7 +342,7 @@ class ParallelEnvironment(CogmentEnv):
             self.env: ParallelEnv = self.env_maker(**self.make_args)
             self.agent_specs = self.create_agent_specs(self.env)
         else:
-            self.env = None
+            self.env = ParallelEnv()
             self.agent_specs = {}
 
         self.initialized = False
@@ -365,10 +366,10 @@ class ParallelEnvironment(CogmentEnv):
             state.env = self.env
             state.agent_specs = self.agent_specs
         elif self.initialized and not self.reinitialize:
-            state.env: ParallelEnv = self.env
+            state.env = self.env  # type: ignore
             state.agent_specs = self.agent_specs
         elif self.reinitialize:
-            state.env: ParallelEnv = self.env_maker(**self.make_args)
+            state.env = self.env_maker(**self.make_args)  # type: ignore
             state.agent_specs = self.create_agent_specs(state.env)
 
         self.initialized = True

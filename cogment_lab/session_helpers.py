@@ -46,7 +46,7 @@ class ActorSessionHelper:
     def get_observation_space(self) -> ObservationSpace:
         return self.observation_space
 
-    def get_observation(self, event: RecvEvent) -> Observation:
+    def get_observation(self, event: RecvEvent) -> Observation | None:
         """
         Return the cogment verse observation for the current event.
 
@@ -57,7 +57,7 @@ class ActorSessionHelper:
 
         return self.observation_space.deserialize(event.observation.observation)
 
-    def get_render(self, event: RecvEvent) -> bytes:
+    def get_render(self, event: RecvEvent) -> bytes | None:
         """
         Return the render for the current event.
 

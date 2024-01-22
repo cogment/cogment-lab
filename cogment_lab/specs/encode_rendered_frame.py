@@ -37,7 +37,7 @@ def encode_rendered_frame(rendered_frame: np.ndarray, max_size: int = MAX_RENDER
         else:
             new_width = max_size
             new_height = int(height / width * new_width)
-        image = image.resize((new_width, new_height), Image.ANTIALIAS)
+        image = image.resize((new_width, new_height), Image.ANTIALIAS)  # type: ignore
 
     with io.BytesIO() as output:
         image.save(output, format=format)

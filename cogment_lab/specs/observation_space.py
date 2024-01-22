@@ -16,7 +16,7 @@ import gymnasium as gym
 import numpy as np
 
 from cogment_lab.constants import DEFAULT_RENDERED_WIDTH
-from cogment_lab.generated.data_pb2 import Observation as PbObservation
+from cogment_lab.generated.data_pb2 import Observation as PbObservation  # type: ignore
 
 from .encode_rendered_frame import decode_rendered_frame, encode_rendered_frame
 from .ndarray_serialization import deserialize_ndarray, serialize_ndarray
@@ -184,6 +184,7 @@ class ObservationSpace:
         serialized_value = None
         if observation.value is not None:
             flat_value = gym.spaces.flatten(self.gym_space, observation.value)
+            assert isinstance(flat_value, np.ndarray)
             serialized_value = serialize_ndarray(flat_value)
 
         serialized_rendered_frame = None

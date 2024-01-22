@@ -15,14 +15,12 @@
 import gymnasium as gym
 import numpy as np
 
-from cogment_lab.generated.spaces_pb2 import (  # pylint: disable=import-error
-    Box,
-    Dict,
-    Discrete,
-    MultiBinary,
-    MultiDiscrete,
-    Space,
-)
+from cogment_lab.generated.spaces_pb2 import Box  # type: ignore
+from cogment_lab.generated.spaces_pb2 import Dict  # type: ignore
+from cogment_lab.generated.spaces_pb2 import Discrete  # type: ignore
+from cogment_lab.generated.spaces_pb2 import MultiBinary  # type: ignore
+from cogment_lab.generated.spaces_pb2 import MultiDiscrete  # type: ignore
+from cogment_lab.generated.spaces_pb2 import Space  # type: ignore
 
 from .ndarray_serialization import (
     SerializationFormat,

@@ -94,8 +94,10 @@ class GymEnvironment(CogmentEnv):
 
         if isinstance(self.env_id, Callable):
             self.env_maker = self.env_id
+        elif isinstance(self.env_id, str):
+            self.env_maker = lambda **kwargs: gym.make(self.env_id, **kwargs)  # type: ignore
         else:
-            self.env_maker = lambda **kwargs: gym.make(self.env_id, **kwargs)
+            raise ValueError(f"env_id must be a string or a callable, got {self.env_id}")
 
         if self.registration:
             importlib.import_module(self.registration)

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import gymnasium as gym
 
-from cogment_lab.generated.data_pb2 import AgentSpecs as PbAgentSpecs
+from cogment_lab.generated.data_pb2 import AgentSpecs as PbAgentSpecs  # type: ignore
 
 from ..constants import DEFAULT_RENDERED_WIDTH
 from .action_space import ActionSpace

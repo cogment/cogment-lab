@@ -39,8 +39,8 @@ def convert_trial_data_to_coltra(trial_data: TrialData, agent: Agent) -> OnPolic
     # last_value = agent.act(Observation(vector=trial_data.last_observation), get_value=True)[2]["value"]
     # value = agent.act(Observation(vector=trial_data.observations), get_value=True)[2]["value"]
 
-    last_value, _ = agent.value(Observation(vector=trial_data.last_observation), ())
-    value, _ = agent.value(Observation(vector=trial_data.observations), ())
+    last_value, _ = agent.value(Observation(vector=trial_data.last_observation), ())  # type: ignore
+    value, _ = agent.value(Observation(vector=trial_data.observations), ())  # type: ignore
 
     last_value = last_value.detach().squeeze(-1).cpu().numpy()
     value = value.detach().squeeze(-1).cpu().numpy()
@@ -51,8 +51,8 @@ def convert_trial_data_to_coltra(trial_data: TrialData, agent: Agent) -> OnPolic
 
     # Create an OnPolicyRecord instance with the mapped fields
     on_policy_record = OnPolicyRecord(
-        obs=Observation(vector=obs).tensor(),
-        action=Action(discrete=action).tensor(),
+        obs=Observation(vector=obs).tensor(),  # type: ignore
+        action=Action(discrete=action).tensor(),  # type: ignore
         reward=torch.tensor(reward.astype(np.float32)),
         value=torch.tensor(value.astype(np.float32)),
         done=torch.tensor(done.astype(np.float32)),

@@ -60,7 +60,7 @@ class GymTeacherAEC(AECEnv):
         self.infos = {"gym": info, "teacher": info}
         self._gym_action = None
 
-    def step(self, action):
+    def step(self, action: dict):
         current_agent = self.agent_selection
         next_agent = self._agent_selector.next()
 
@@ -110,10 +110,10 @@ class GymTeacherAEC(AECEnv):
             N = 5
 
             # Set the borders to red
-            img[:N, :, :] = [255, 0, 0]  # Top border
-            img[-N:, :, :] = [255, 0, 0]  # Bottom border
-            img[:, :N, :] = [255, 0, 0]  # Left border
-            img[:, -N:, :] = [255, 0, 0]  # Right border
+            img[:N, :, :] = [255, 0, 0]  # type: ignore
+            img[-N:, :, :] = [255, 0, 0]  # type: ignore
+            img[:, :N, :] = [255, 0, 0]  # type: ignore
+            img[:, -N:, :] = [255, 0, 0]  # type: ignore
         return img
 
     def close(self):
@@ -190,10 +190,10 @@ class GymTeacherParallel(ParallelEnv):
             N = 5
 
             # Set the borders to red
-            img[:N, :, :] = [255, 0, 0]  # Top border
-            img[-N:, :, :] = [255, 0, 0]  # Bottom border
-            img[:, :N, :] = [255, 0, 0]  # Left border
-            img[:, -N:, :] = [255, 0, 0]  # Right border
+            img[:N, :, :] = [255, 0, 0]  # type: ignore
+            img[-N:, :, :] = [255, 0, 0]  # type: ignore
+            img[:, :N, :] = [255, 0, 0]  # type: ignore
+            img[:, -N:, :] = [255, 0, 0]  # type: ignore
         return img
 
     def close(self):

@@ -78,7 +78,7 @@ class BoltzmannActor(CogmentActor):
             [act_vals] = self.network(obs)
             act_probs = F.softmax(act_vals / self.temperature, dim=0)
 
-            action = torch.multinomial(act_probs, 1).item()
+            action = int(torch.multinomial(act_probs, 1).item())
 
         return action
 
