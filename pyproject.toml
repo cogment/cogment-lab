@@ -98,15 +98,10 @@ pythonVersion = "3.10"
 pythonPlatform = "All"
 enableTypeIgnoreComments = true
 
-# This is required as the CI pre-commit does not download the module (i.e. numpy, pygame, box2d)
-#   Therefore, we have to ignore missing imports
 reportMissingImports = "none"
-# Some modules are missing type stubs, which is an issue when running pyright locally
 reportMissingTypeStubs = false
-# For warning and error, will raise an error when
 reportInvalidTypeVarUse = "none"
-
-
+reportMissingModuleSource = "none"
 reportPrivateUsage = "warning"
 reportUnboundVariable = "warning"
 
