@@ -44,6 +44,6 @@ body:
       label: Checklist
       options:
         - label: >
-            I have checked that there is no similar [issue](https://github.com/cogment/cogment_lab/issues) in
+            I have checked that there is no similar [issue](https://github.com/cogment/cogment-lab/issues) in
             the repo
           required: true
