@@ -21,11 +21,13 @@ import logging
 import multiprocessing as mp
 import os
 from asyncio import Task
-from collections.abc import Sequence
+from collections.abc import Callable, Coroutine, Sequence
 from multiprocessing import Process, Queue
-from typing import Any, Callable, Coroutine
+from typing import Any
 
 import cogment
+from cogment.control import Controller
+from cogment.datastore import Datastore
 
 from cogment_lab.actors.runner import actor_runner
 from cogment_lab.core import BaseActor, BaseEnv
@@ -39,13 +41,6 @@ from cogment_lab.utils.trial_utils import (
 )
 
 
-ORCHESTRATOR_ENDPOINT = "grpc://localhost:9000"
-ENVIRONMENT_ENDPOINT = "grpc://localhost:9001"
-RANDOM_AGENT_ENDPOINT = "grpc://localhost:9002"
-HUMAN_AGENT_ENDPOINT = "grpc://localhost:8999"
-DATASTORE_ENDPOINT = "grpc://localhost:9003"
-
-
 AgentName = str
 ImplName = str
 TrialName = str
@@ -54,12 +49,17 @@ TrialName = str
 class Cogment:
     """Main Cogment class for managing experiments"""
 
+    controller: Controller
+    datastore: Datastore
+
     def __init__(
         self,
         user_id: str = "cogment_lab",
         torch_mode: bool = False,
         log_dir: str | None = None,
         mp_method: str | None = None,
+        orchestrator_port: int = 9000,
+        datastore_port: int = 9003,
     ):
         """Initializes the Cogment instance
 
@@ -79,9 +79,20 @@ class Cogment:
         self.envs: dict[ImplName, BaseEnv] = {}
         self.actors: dict[ImplName, BaseActor] = {}
 
+        self.orchestrator_endpoint = f"grpc://localhost:{orchestrator_port}"
+        self.datastore_endpoint = f"grpc://localhost:{datastore_port}"
+
         self.context = cogment.Context(cog_settings=cog_settings, user_id=user_id)
-        self.controller = self.context.get_controller(endpoint=cogment.Endpoint(ORCHESTRATOR_ENDPOINT))
-        self.datastore = self.context.get_datastore(endpoint=cogment.Endpoint(DATASTORE_ENDPOINT))
+        controller = self.context.get_controller(endpoint=cogment.Endpoint(self.orchestrator_endpoint))
+        datastore = self.context.get_datastore(endpoint=cogment.Endpoint(self.datastore_endpoint))
+
+        assert isinstance(
+            controller, Controller
+        ), "self.controller is not an instance of Controller. Please report this."
+        assert isinstance(datastore, Datastore), "self.datastore is not an instance of Datastore. Please report this."
+
+        self.controller = controller
+        self.datastore = datastore
 
         self.env_ports: dict[ImplName, int] = {}
         self.actor_ports: dict[ImplName, int] = {}
@@ -121,7 +132,7 @@ class Cogment:
 
             p = TorchProcess(target=target, args=args)
         else:
-            p = self.mp_ctx.Process(target=target, args=args)
+            p = self.mp_ctx.Process(target=target, args=args)  # type: ignore
         p.start()
         self.processes[name] = p
 
@@ -148,7 +159,7 @@ class Cogment:
         env_name: ImplName,
         port: int = 9001,
         log_file: str | None = None,
-    ) -> Coroutine[bool]:
+    ) -> Coroutine[None, None, bool]:
         """Given an environment, runs it in a subprocess
 
         Args:
@@ -195,7 +206,7 @@ class Cogment:
         actor_name: ImplName,
         port: int = 9002,
         log_file: str | None = None,
-    ) -> Coroutine[bool]:
+    ) -> Coroutine[None, None, bool]:
         """Given an actor, runs it
 
         Args:
@@ -282,7 +293,7 @@ class Cogment:
         html_override: str | None = None,
         file_override: str | None = None,
         jinja_parameters: dict[str, Any] | None = None,
-    ) -> Coroutine[bool]:
+    ) -> Coroutine[None, None, bool]:
         """Runs the human actor in a separate process
 
         Args:
@@ -457,7 +468,7 @@ class Cogment:
             for agent_name, actor_impl in actor_impls.items()
         ]
 
-        env_config = data_pb2.EnvironmentConfig(**session_config)
+        env_config = data_pb2.EnvironmentConfig(**session_config)  # type: ignore
 
         trial_params = cogment.TrialParameters(
             cog_settings,
@@ -466,7 +477,7 @@ class Cogment:
             environment_config=env_config,
             actors=actor_params,
             environment_implementation=env_name,
-            datalog_endpoint=DATASTORE_ENDPOINT,
+            datalog_endpoint=self.datastore_endpoint,
         )
 
         trial_id = await self.controller.start_trial(trial_id_requested=trial_name, trial_params=trial_params)

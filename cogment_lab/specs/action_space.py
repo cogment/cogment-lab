@@ -14,7 +14,7 @@
 
 import gymnasium as gym
 
-from cogment_lab.generated.data_pb2 import PlayerAction  # pylint: disable=import-error
+from cogment_lab.generated.data_pb2 import PlayerAction  # type: ignore
 
 from .ndarray_serialization import deserialize_ndarray, serialize_ndarray
 
@@ -90,10 +90,10 @@ class ActionSpace:
             Random seed used when generating random actions
     """
 
-    def __init__(self, gym_space: gym.Space, seed: int = None):
+    def __init__(self, gym_space: gym.Space, seed: int | None = None):
         self.gym_space = gym_space
 
-        if seed:
+        if seed is not None:
             self.gym_space.seed(int(seed))
 
     def create(self, value=None):

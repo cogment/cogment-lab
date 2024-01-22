@@ -24,7 +24,6 @@ import numpy as np
 from cogment import ActorParameters
 from cogment.datastore import Datastore, DatastoreSample
 
-from cogment_lab.core import CogmentEnv
 from cogment_lab.generated import cog_settings
 from cogment_lab.specs import AgentSpecs
 from cogment_lab.utils.grpc import extend_actor_config
@@ -103,16 +102,18 @@ def initialize_buffer(space: gym.Space | None, length: int) -> np.ndarray | dict
     if space is None:
         return np.empty((length,), dtype=np.float32)
     elif isinstance(space, gym.spaces.Dict):
-        return {key: np.empty((length,) + space[key].shape, dtype=space[key].dtype) for key in space.spaces.keys()}
+        return {key: np.empty((length,) + space[key].shape, dtype=space[key].dtype) for key in space.spaces.keys()}  # type: ignore
     elif isinstance(space, gym.spaces.Tuple):
-        return {i: np.empty((length,) + space[i].shape, dtype=space[i].dtype) for i in range(len(space.spaces))}
+        return {i: np.empty((length,) + space[i].shape, dtype=space[i].dtype) for i in range(len(space.spaces))}  # type: ignore
     else:  # Simple space
+        assert isinstance(space, gym.spaces.Space)
+        assert space.shape is not None
         return np.empty((length,) + space.shape, dtype=space.dtype)
 
 
 def write_to_buffer(
     buffer: np.ndarray | dict[str, np.ndarray],
-    data: np.ndarray | dict[str, Any],
+    data: np.ndarray | dict[str, Any] | bool,
     idx: int,
 ):
     """
@@ -126,59 +127,9 @@ def write_to_buffer(
     """
     if isinstance(buffer, dict):
         for key in buffer.keys():
-            buffer[key][idx] = data[key]
+            buffer[key][idx] = data[key]  # type: ignore
     else:
         buffer[idx] = data
-
-
-async def format_data(
-    datastore: Datastore,
-    trial_id: str,
-    fields: Sequence[str] = (
-        "observations",
-        "actions",
-        "done",
-        "next_observations",
-        "last_observation",
-    ),
-    agent_specs: AgentSpecs | None = None,
-    env: CogmentEnv | None = None,
-) -> TrialData:
-    """
-    Formats trial data from a Cogment trial into a structured format for reinforcement learning.
-
-    Args:
-        datastore (Datastore): The datastore to fetch trial data from.
-        trial_id (str): The identifier of the trial.
-        fields (List[str]): The list of fields to include in the formatted data.
-        agent_specs (Optional[EnvironmentSpecs]): The environment specifications, optional.
-        env (Optional[CogmentEnv]): A Cogment environment, optional.
-
-    Returns:
-        TrialData: The formatted trial data.
-
-    Raises:
-        AssertionError: If both agent_specs and env are None.
-    """
-    assert agent_specs is not None or env is not None, "Either agent_specs or env must be provided"
-    assert agent_specs is None or env is None, "Only one of agent_specs and env can be provided"
-
-    if agent_specs is None:
-        assert env is not None
-        agent_specs = env.agent_specs
-
-    trials = await datastore.get_trials([trial_id])
-    samples = []
-    async for sample in datastore.all_samples(trials):
-        samples.append(sample)
-        if sample.trial_state == cogment.TrialState.ENDED:
-            break
-        # if len(samples) >= sample_count:
-        #     break
-
-    data = extract_data_from_samples(samples, agent_specs, fields)
-
-    return data
 
 
 def extract_data_from_samples(
@@ -218,14 +169,14 @@ def extract_data_from_samples(
 
     data = TrialData()
     if "observations" in fields:
-        data.observations = initialize_buffer(observation_space, sample_count - 1)
+        data.observations = initialize_buffer(observation_space, sample_count - 1)  # type: ignore
     if "actions" in fields:
-        data.actions = initialize_buffer(action_space, sample_count - 1)
+        data.actions = initialize_buffer(action_space, sample_count - 1)  # type: ignore
     if "rewards" in fields:
-        data.rewards = initialize_buffer(None, sample_count - 1)
+        data.rewards = initialize_buffer(None, sample_count - 1)  # type: ignore
     if "done" in fields:
-        data.done = initialize_buffer(None, sample_count - 1)
-        data.done[-1] = True
+        data.done = initialize_buffer(None, sample_count - 1)  # type: ignore
+        data.done[-1] = True  # type: ignore
     if "next_observations" in fields:
         data.next_observations = initialize_buffer(observation_space, sample_count - 1)
     if "last_observation" in fields:
@@ -234,22 +185,22 @@ def extract_data_from_samples(
     for i, sample in enumerate(samples[:-1]):
         if "observations" in fields:
             obs = cog_observation_space.deserialize(sample.actors_data[actor_name].observation).value
-            write_to_buffer(data.observations, obs, i)
+            write_to_buffer(data.observations, obs, i)  # type: ignore
         if "actions" in fields:
             action = cog_action_space.deserialize(sample.actors_data[actor_name].action).value
-            write_to_buffer(data.actions, action, i)
+            write_to_buffer(data.actions, action, i)  # type: ignore
         if "rewards" in fields:
-            write_to_buffer(data.rewards, sample.actors_data[actor_name].reward, i)
+            write_to_buffer(data.rewards, sample.actors_data[actor_name].reward, i)  # type: ignore
         if "done" in fields and i < sample_count - 2:
-            write_to_buffer(data.done, False, i)
+            write_to_buffer(data.done, False, i)  # type: ignore
         if "next_observations" in fields:
             next_obs = cog_observation_space.deserialize(samples[i + 1].actors_data[actor_name].observation).value
-            write_to_buffer(data.next_observations, next_obs, i)
+            write_to_buffer(data.next_observations, next_obs, i)  # type: ignore
     if "last_observation" in fields:
         last_obs = (
             agent_specs.get_observation_space().deserialize(samples[-1].actors_data[actor_name].observation).value
         )
-        write_to_buffer(data.last_observation, last_obs, 0)
+        write_to_buffer(data.last_observation, last_obs, 0)  # type: ignore
 
     return data
 
@@ -257,7 +208,7 @@ def extract_data_from_samples(
 def extract_rewards_from_samples(
     samples: list[DatastoreSample],
     actor_name: str = "gym",
-) -> TrialData:
+) -> np.ndarray:
     """
     Extracts rewards from trial samples into a TrialData instance.
 
@@ -271,6 +222,7 @@ def extract_rewards_from_samples(
     sample_count = len(samples)
 
     rewards = initialize_buffer(None, sample_count - 1)
+    assert isinstance(rewards, np.ndarray)
 
     for i, sample in enumerate(samples[:-1]):
         write_to_buffer(rewards, sample.actors_data[actor_name].reward, i)
@@ -298,9 +250,9 @@ def concat_trial_field(
         return None
 
     if all(isinstance(data, np.ndarray) for data in valid_field_data):
-        return np.concatenate(valid_field_data, axis=0)
+        return np.concatenate(valid_field_data, axis=0)  # type: ignore
     elif all(isinstance(data, dict) for data in valid_field_data):
-        keys = valid_field_data[0].keys()
+        keys = valid_field_data[0].keys()  # type: ignore
         return {key: np.concatenate([data[key] for data in valid_field_data], axis=0) for key in keys}
     else:
         raise TypeError("Inconsistent field types in TrialData list.")
@@ -331,8 +283,8 @@ def concatenate(trial_data_list: list[TrialData]) -> TrialData:
     return TrialData(
         observations=observations,
         actions=actions,
-        rewards=rewards,
-        done=done,
+        rewards=rewards,  # type: ignore
+        done=done,  # type: ignore
         next_observations=next_observations,
         last_observation=last_observation,
     )
@@ -376,7 +328,7 @@ async def format_data_multiagent(
 
     # Get all samples
     all_samples = []
-    async for sample in datastore.all_samples(trials):
+    async for sample in datastore.all_samples(trials):  # type: ignore
         all_samples.append(sample)
 
     # Sort according to tick_id -- this might not be necessary with some version of cogment

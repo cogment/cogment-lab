@@ -22,9 +22,9 @@ from cogment_lab.generated import data_pb2
 def extend_actor_config(
     actor_config_template: dict,
     run_id: str,
-    agent_specs: data_pb2.AgentSpecs,
+    agent_specs: data_pb2.AgentSpecs,  # type: ignore
     seed: int,
-) -> data_pb2.AgentConfig:
+) -> data_pb2.AgentConfig:  # type: ignore
     """Extends an actor configuration template with additional parameters.
 
     Args:
@@ -36,7 +36,7 @@ def extend_actor_config(
     Returns:
         An instance of AgentConfig with extended configuration.
     """
-    config = data_pb2.AgentConfig()
+    config = data_pb2.AgentConfig()  # type: ignore
     if actor_config_template:
         ParseDict(actor_config_template, config)
     config.run_id = run_id
@@ -45,7 +45,7 @@ def extend_actor_config(
     return config
 
 
-def create_value(val: str | int | float) -> data_pb2.Value:
+def create_value(val: str | int | float) -> data_pb2.Value:  # type: ignore
     """Creates a Value protobuf message from a Python value.
 
     Args:
@@ -54,7 +54,7 @@ def create_value(val: str | int | float) -> data_pb2.Value:
     Returns:
         A Value protobuf message containing the input value.
     """
-    value_message = data_pb2.Value()
+    value_message = data_pb2.Value()  # type: ignore
     if isinstance(val, str):
         value_message.string_value = val
     elif isinstance(val, int):
@@ -73,7 +73,7 @@ def get_env_config(
     seed: int | None = None,
     flatten: bool | None = None,
     reset_args_dict: dict[str, str | int | float] | None = None,
-) -> data_pb2.EnvironmentConfig:
+) -> data_pb2.EnvironmentConfig:  # type: ignore
     """Generates an EnvironmentConfig protobuf message.
 
     Args:
@@ -89,7 +89,7 @@ def get_env_config(
     """
     if reset_args_dict is None:
         reset_args_dict = {}
-    env_config = data_pb2.EnvironmentConfig()
+    env_config = data_pb2.EnvironmentConfig()  # type: ignore
 
     env_config.run_id = run_id
     env_config.render = render

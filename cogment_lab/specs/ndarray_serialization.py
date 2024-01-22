@@ -19,16 +19,14 @@ from enum import Enum
 
 import numpy as np
 
-from cogment_lab.generated.ndarray_pb2 import (
-    DTYPE_FLOAT32,
-    DTYPE_FLOAT64,
-    DTYPE_INT8,
-    DTYPE_INT32,
-    DTYPE_INT64,
-    DTYPE_UINT8,
-    DTYPE_UNKNOWN,
-    Array,
-)
+from cogment_lab.generated.ndarray_pb2 import DTYPE_FLOAT32  # type: ignore
+from cogment_lab.generated.ndarray_pb2 import DTYPE_FLOAT64  # type: ignore
+from cogment_lab.generated.ndarray_pb2 import DTYPE_INT8  # type: ignore
+from cogment_lab.generated.ndarray_pb2 import DTYPE_INT32  # type: ignore
+from cogment_lab.generated.ndarray_pb2 import DTYPE_INT64  # type: ignore
+from cogment_lab.generated.ndarray_pb2 import DTYPE_UINT8  # type: ignore
+from cogment_lab.generated.ndarray_pb2 import DTYPE_UNKNOWN  # type: ignore
+from cogment_lab.generated.ndarray_pb2 import Array  # type: ignore
 
 
 PB_DTYPE_FROM_DTYPE = {

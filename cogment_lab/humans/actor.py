@@ -39,9 +39,9 @@ from cogment_lab.generated import cog_settings
 def image_to_msg(img: np.ndarray | None) -> str | None:
     if img is None:
         return None
-    img = Image.fromarray(img)
+    image = Image.fromarray(img)
     img_byte_array = io.BytesIO()
-    img.save(img_byte_array, format="PNG")  # type: ignore
+    image.save(img_byte_array, format="PNG")  # type: ignore
     base64_encoded_result_bytes = base64.b64encode(img_byte_array.getvalue())
     base64_encoded_result_str = base64_encoded_result_bytes.decode("ascii")
     return f"data:image/png;base64,{base64_encoded_result_str}"
@@ -157,11 +157,11 @@ class HumanPlayer(CogmentActor):
         self.recv_queue = recv_queue
 
     async def act(self, observation: Any, rendered_frame: np.ndarray | None = None) -> int:
-        logging.info(
-            f"Getting an action with {observation=}" + f" and {rendered_frame.shape=}"
-            if rendered_frame is not None
-            else "no frame"
-        )
+        # logging.info(
+        #     f"Getting an action with {observation=}" + f" and {rendered_frame.shape=}"
+        #     if rendered_frame is not None
+        #     else "no frame"
+        # )
         await self.send_queue.put(rendered_frame)
         action = await self.recv_queue.get()
         return action
@@ -187,30 +187,3 @@ async def run_cogment_actor(
     signal_queue.put(True)
 
     await serve
-
-
-async def shutdown():
-    tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
-    for task in tasks:
-        task.cancel()
-    await asyncio.gather(*tasks, return_exceptions=True)
-    asyncio.get_event_loop().stop()
-
-
-def signal_handler(sig, frame):
-    asyncio.create_task(shutdown())
-
-
-async def main(app_port: int = 8000, cogment_port: int = 8999):
-    app_to_actor = asyncio.Queue()
-    actor_to_app = asyncio.Queue()
-    fastapi_task = asyncio.create_task(start_fastapi(port=app_port, send_queue=app_to_actor, recv_queue=actor_to_app))
-    cogment_task = asyncio.create_task(
-        run_cogment_actor(port=cogment_port, send_queue=actor_to_app, recv_queue=app_to_actor)
-    )
-
-    await asyncio.gather(fastapi_task, cogment_task)
-
-
-if __name__ == "__main__":
-    asyncio.run(main())

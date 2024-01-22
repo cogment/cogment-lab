@@ -6,7 +6,18 @@ build-backend = "hatchling.build"
 name = "cogment_lab"
 dynamic = ["version"]
 readme = "README.md"
-license = ""
+license = "Apache-2.0"
+keywords = ["Reinforcement Learning", "RL", "AI", "human-in-the-loop", "HILL"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    'Intended Audience :: Science/Research',
+    'Topic :: Scientific/Engineering :: Artificial Intelligence',
+]
 
 dependencies = [
     "cogment[generate]>=2.10.1,<3.0.0",
@@ -14,11 +25,10 @@ dependencies = [
     "grpcio-tools>=1.48",
     "PyYAML>=5.0",
     "starlette>=0.21.0",
-    "uvicorn>=0.17.6",
+    "uvicorn[standard]>=0.17.6",
     "Gymnasium[classic_control]~=0.29",
     "PettingZoo~=1.23.1",
     "numpy",
-    "opencv-python>=4.8",
     "fastapi>=0.103",
     "pillow>=9.0",
 ]
@@ -91,28 +101,17 @@ multi_line_output = 3
 
 [tool.pyright]
 include = ["cogment_lab/**", "tests/**"]
-exclude = ["**/node_modules", "**/__pycache__", "cogment_lab/generated/**"]
+exclude = ["**/node_modules", "**/__pycache__", "cogment_lab/generated/*.py"]
 strict = []
 typeCheckingMode = "basic"
 pythonVersion = "3.10"
 pythonPlatform = "All"
 enableTypeIgnoreComments = true
 
-# This is required as the CI pre-commit does not download the module (i.e. numpy, pygame, box2d)
-#   Therefore, we have to ignore missing imports
 reportMissingImports = "none"
-# Some modules are missing type stubs, which is an issue when running pyright locally
 reportMissingTypeStubs = false
-# For warning and error, will raise an error when
 reportInvalidTypeVarUse = "none"
-
-# reportUnknownMemberType = "warning"  # -> raises 6035 warnings
-# reportUnknownParameterType = "warning"  # -> raises 1327 warnings
-# reportUnknownVariableType = "warning"  # -> raises 2585 warnings
-# reportUnknownArgumentType = "warning"  # -> raises 2104 warnings
-reportGeneralTypeIssues = "none"        # -> commented out raises 489 errors
-reportUntypedFunctionDecorator = "none" # -> pytest.mark.parameterize issues
-
+reportMissingModuleSource = "none"
 reportPrivateUsage = "warning"
 reportUnboundVariable = "warning"
 

@@ -13,4 +13,4 @@
 # limitations under the License.
 
 from cogment_lab.envs.gymnasium import GymEnvironment
-from cogment_lab.envs.pettingzoo import AECEnvironment
+from cogment_lab.envs.pettingzoo import AECEnvironment, ParallelEnvironment

@@ -159,7 +159,10 @@ async def main():
 
         # Add data to replay buffer
 
-        for t in range(len(dqn_data.done)):
+        human_interventions = 0
+        total_steps = len(dqn_data.done)
+
+        for t in range(total_steps):
             state = dqn_data.observations[t]
             dqn_action = dqn_data.actions[t]
             try:
@@ -170,6 +173,7 @@ async def main():
                 human_active = 0
                 human_action = 0
 
+            human_interventions += human_active
             action = human_action if human_active == 1 else dqn_action
 
             reward = dqn_data.rewards[t]
@@ -197,6 +201,8 @@ async def main():
             "ep_length": len(dqn_data.rewards),
             "total_timesteps": total_timesteps,
             "gradient_updates": gradient_updates,
+            "human_interventions": human_interventions,
+            "human_intervention_rate": human_interventions / total_steps,
         }
 
         wandb.log(log_dict)
