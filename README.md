@@ -20,6 +20,14 @@ It is based on [cogment](https://cogment.ai), a low-level framework for exchangi
 environments, AI agents and humans.
 It's the perfect tool for when you want to interact with your environment yourself, and maybe even trained AI agents.
 
+# Installation guide
+
+1. Activate your venv, conda env, or whatever you use to keep your python environment clean.
+2. Install cogment_lab with `pip install cogment_lab`
+3. Install cogment with `cogmentlab install`
+4. In a separate terminal, run `cogmentlab launch base` to start the orchestrator and datastore. Keep it open.
+5. Run the tutorials, examples, or whatever you want to do.
+
 # Cogment interaction model
 
 While it typically isn't necessary to interact with Cogment directly to use Cogment Lab, it is useful to understand the principles on which it operates.
