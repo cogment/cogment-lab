@@ -12,4 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+from pathlib import Path
+
+
 DEFAULT_RENDERED_WIDTH = 1024
+
+COGMENT_LAB_HOME = os.getenv("COGMENT_LAB_HOME", Path.home() / ".cogment_lab")
