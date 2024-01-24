@@ -31,6 +31,7 @@ dependencies = [
     "numpy",
     "fastapi>=0.103",
     "pillow>=9.0",
+    "jinja2>=3.1",
 ]
 
 [project.scripts]
@@ -59,12 +60,7 @@ all = [
     "jupyter>=1.0.0",
     "jupyterlab>=3.5.3",
 ]
-dev = [
-    "pytest>=7.1.3",
-    "pytest-asyncio",
-    "ruff>=0.1.7",
-    "hatch>=1.7.0"
-]
+dev = ["pytest>=7.1.3", "pytest-asyncio", "ruff>=0.1.7", "hatch>=1.7.0"]
 coltra = ["coltra>=0.2.1", "torch", "wandb>=0.13.9"]
 
 [project.urls]
