@@ -104,7 +104,6 @@ async def start_fastapi(
     @app.websocket("/ws")
     async def websocket_endpoint(websocket: WebSocket):
         logging.info("Waiting for socket connection")
-        logging.info("Setting last_action_data")
         last_action_data = "no-op"
         logging.info(f"Set {last_action_data=}")
         await websocket.accept()

@@ -236,7 +236,7 @@ class GymEnvironment(CogmentEnv):
         logging.info("Stepping environment")
 
         obs, reward, terminated, truncated, info = state.env.step(action)
-        logging.info(f"Step returned {obs=}, {reward=}, {terminated=}, {truncated=}, {info=}")
+        logging.info("Stepping the environment")
 
         observation = state.observation_space.create_serialize(
             value=obs,
