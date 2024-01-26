@@ -96,8 +96,6 @@ async def main():
 
     for episode in (pbar := trange(args.num_episodes)):
         actor.set_eps(get_current_eps(episode))
-        if episode == args.human_episodes:
-            cog.stop_service("lunar")
 
         trial_id = await cog.start_trial(
             env_name="lunar",
