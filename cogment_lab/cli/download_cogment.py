@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
 import json
 import os
 import platform
@@ -27,7 +29,7 @@ class Arch(Enum):
     ARM64 = "arm64"
 
 
-def get_current_arch():
+def get_current_arch() -> Arch:
     py_machine = platform.machine()
     if py_machine in ["x86_64", "i686", "AMD64"]:
         return Arch.AMD64
@@ -44,19 +46,19 @@ class Os(Enum):
     MACOS = "macos"
 
 
-def get_current_os():
+def get_current_os() -> Os:
     py_system = platform.system()
-    if py_system in ["Darwin"]:
+    if py_system == "Darwin":
         return Os.MACOS
-    if py_system in ["Windows"]:
+    if py_system == "Windows":
         return Os.WINDOWS
-    if py_system in ["Linux"]:
+    if py_system == "Linux":
         return Os.LINUX
 
     raise RuntimeError(f"Unsupported os [{py_system}]")
 
 
-def get_latest_release_version():
+def get_latest_release_version() -> str:
     res = urlopen("https://api.github.com/repos/cogment/cogment/releases/latest")
 
     parsedBody = json.load(res)
@@ -65,10 +67,10 @@ def get_latest_release_version():
 
 
 def download_cogment(
-    output_dir=None,
-    desired_version=None,
-    desired_arch=None,
-    desired_os=None,
+    output_dir: str | None = None,
+    desired_version: str | None = None,
+    desired_arch: Arch | None = None,
+    desired_os: Os | None = None,
 ):
     """
     Download a version of cogment
@@ -98,10 +100,10 @@ def download_cogment(
     except RuntimeError as exc:
         raise RuntimeError(f"Desired cogment version [{desired_version}] doesn't follow the expected patterns") from exc
 
-    if not desired_arch:
+    if desired_arch is None:
         desired_arch = get_current_arch()
 
-    if not desired_os:
+    if desired_os is None:
         desired_os = get_current_os()
 
     cogment_url = (
