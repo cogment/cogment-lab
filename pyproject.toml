@@ -32,6 +32,7 @@ dependencies = [
     "fastapi>=0.103",
     "pillow>=9.0",
     "tqdm"
+    "jinja2>=3.1"
 ]
 
 [project.scripts]
