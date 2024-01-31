@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
-## v0.1.1 - 2024-01-22
-
+### Fixed
+- jinja2 is now correctly a dependency
 
 ## v0.1.1 - 2024-01-22
 
