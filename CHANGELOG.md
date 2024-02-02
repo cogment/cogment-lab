@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## v0.1.2 - 2024-02-02
 
+## v0.1.2 - 2024-02-02
+
 ### Added
 - Added an optional progress bar to data collection, with tqdm as a new dependency
 
