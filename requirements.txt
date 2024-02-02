@@ -4,6 +4,7 @@ starlette>=0.21.0
 uvicorn[standard]==0.17.6
 fastapi>=0.103.2
 pillow>=9.0
+tqdm
 
 # environments
 Gymnasium~=0.29
