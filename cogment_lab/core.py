@@ -258,7 +258,6 @@ class CogmentActor(BaseActor, abc.ABC, Generic[Observation, Action]):
                 observation = self.session_helper.get_observation(event)
                 if observation is None:
                     continue
-                logging.info(f"Got observation: {observation}")
 
                 if not observation.active:
                     action = None
@@ -266,7 +265,6 @@ class CogmentActor(BaseActor, abc.ABC, Generic[Observation, Action]):
                     action = None
                 else:
                     action = await self.act(observation.value, observation.rendered_frame)  # type: ignore
-                logging.info(f"Got action: {action} with action_space: {self.action_space.gym_space}")
                 cog_action = self.action_space.create_serialize(action)
                 actor_session.do_action(cog_action)
             if event.rewards:

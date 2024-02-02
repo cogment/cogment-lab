@@ -152,7 +152,6 @@ class AECEnvironment(CogmentEnv):
         state.actor_name = agent
 
         frame = state.env.render() if state.session_cfg.render else None
-        logging.info(f"Creating observation from {obs=}")
         observation = state.observation_spaces[agent].create_serialize(
             value=obs, rendered_frame=frame, active=True, alive=True
         )
@@ -300,7 +299,7 @@ class ParallelEnvironment(CogmentEnv):
         sub_dry: bool = True,
     ):
         """
-        Initialize the AECEnvironment.
+        Initialize the ParallelEnvironment.
 
         Args:
             env_path: Path to the PettingZoo environment class.
@@ -398,7 +397,6 @@ class ParallelEnvironment(CogmentEnv):
         obs, info = state.env.reset(seed=state.session_cfg.seed)
 
         frame = state.env.render() if state.session_cfg.render else None
-        logging.info(f"Creating observation from {obs=}")
 
         if frame is not None:
             logging.info(f"Frame shape at reset: {frame.shape}")
