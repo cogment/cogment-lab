@@ -6,8 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
+## v0.1.2 - 2024-02-02
+
+### Added
+- Added an optional progress bar to data collection, with tqdm as a new dependency
+
+### Fixed
 - jinja2 is now correctly a dependency
-- Added an optional progress bar to data collection
+
 
 ## v0.1.1 - 2024-01-22
 
