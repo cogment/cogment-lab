@@ -23,6 +23,7 @@ import gymnasium as gym
 import numpy as np
 from cogment import ActorParameters
 from cogment.datastore import Datastore, DatastoreSample
+from tqdm.auto import tqdm
 
 from cogment_lab.generated import cog_settings
 from cogment_lab.specs import AgentSpecs
@@ -302,6 +303,8 @@ async def format_data_multiagent(
         "next_observations",
         "last_observation",
     ),
+    use_tqdm: bool = False,
+    tqdm_kwargs: dict[str, Any] | None = None,
 ) -> dict[str, TrialData]:
     """
     Formats trial data from a multiagent Cogment trial into structured formats for reinforcement learning.
@@ -311,10 +314,14 @@ async def format_data_multiagent(
         trial_id (str): The identifier of the trial.
         actor_agent_specs (dict[str, EnvironmentSpecs]): A dictionary mapping actor IDs to their environment specifications.
         fields (List[str]): The list of fields to include in the formatted data.
+        tqdm_kwargs (dict[str, Any] | None): Optional keyword arguments to pass to tqdm.
 
     Returns:
         dict[str, TrialData]: A dictionary mapping actor IDs to their formatted trial data.
     """
+    if tqdm_kwargs is None:
+        tqdm_kwargs = {}
+
     trials = []
     while len(trials) == 0:
         try:
@@ -327,14 +334,7 @@ async def format_data_multiagent(
     actor_reward_samples = {actor_id: [] for actor_id in actor_agent_specs.keys()}
 
     # Get all samples
-    all_samples = []
-    async for sample in datastore.all_samples(trials):  # type: ignore
-        all_samples.append(sample)
-
-    # Sort according to tick_id -- this might not be necessary with some version of cogment
-    all_samples.sort(key=lambda x: x.tick_id)
-
-    for sample in all_samples:
+    async for sample in tqdm(datastore.all_samples(trials), disable=not use_tqdm, **tqdm_kwargs):  # type: ignore
         for actor_id in actor_agent_specs.keys():
             # Add the sample to the list for an actor if the observation for that actor is not None
             if (

@@ -500,6 +500,8 @@ class Cogment:
             "next_observations",
             "last_observation",
         ),
+        use_tqdm: bool = False,
+        tqdm_kwargs: dict[str, Any] | None = None,
     ) -> dict[str, TrialData]:
         """Gets trial data from the datastore, formatting it appropriately."""
         if env_name is None:
@@ -507,7 +509,14 @@ class Cogment:
         env = self.envs[env_name]
         agent_specs = env.agent_specs
 
-        data = await format_data_multiagent(self.datastore, trial_id, agent_specs, fields)
+        data = await format_data_multiagent(
+            datastore=self.datastore,
+            trial_id=trial_id,
+            actor_agent_specs=agent_specs,
+            fields=fields,
+            use_tqdm=use_tqdm,
+            tqdm_kwargs=tqdm_kwargs,
+        )
 
         return data
 
