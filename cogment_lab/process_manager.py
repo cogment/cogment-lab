@@ -57,7 +57,7 @@ class Cogment:
         user_id: str = "cogment_lab",
         torch_mode: bool = False,
         log_dir: str | None = None,
-        mp_method: str | None = None,
+        mp_method: str = "spawn",
         orchestrator_port: int = 9000,
         datastore_port: int = 9003,
     ):
@@ -67,8 +67,12 @@ class Cogment:
             user_id (str, optional): User ID. Defaults to "cogment_lab".
             torch_mode (bool, optional): Whether to use PyTorch multiprocessing. Defaults to False.
             log_dir (str, optional): Directory to store logs. Defaults to "logs".
-            mp_method (str | None, optional): Multiprocessing method to use. Defaults to None.
+            mp_method (str, optional): Multiprocessing method to use. Defaults to "spawn". WARNING: Methods other than spawn are likely to not work. Use at your own risk.
         """
+        try:
+            mp.set_start_method(mp_method)
+        except RuntimeError:
+            pass
         self.processes: dict[ImplName, Process] = {}
         self.tasks: dict[ImplName, Task] = {}
 
@@ -132,7 +136,7 @@ class Cogment:
 
             p = TorchProcess(target=target, args=args)
         else:
-            p = self.mp_ctx.Process(target=target, args=args)  # type: ignore
+            p = self.mp_ctx.Process(target=target, args=args, name=f"cogment_lab_{name}")  # type: ignore
         p.start()
         self.processes[name] = p
 
