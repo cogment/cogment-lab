@@ -38,7 +38,7 @@ sys.path.insert(0, "..")
 
 
 def install_cogment():
-    install_dir = COGMENT_LAB_HOME / "bin"
+    install_dir = COGMENT_LAB_HOME
     try:
         cogment_path = download_cogment(install_dir, "2.19.1")
         logging.info(f"Cogment installed successfully in [{cogment_path}].")
