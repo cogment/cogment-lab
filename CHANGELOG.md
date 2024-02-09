@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
-## v0.1.2 - 2024-02-02
+### Fixed
+- `cogmentlab install` no longer requires root access
+
+### Changed
+- The `cogmentlab` command now uses the `cogment` executable stored in `$COGMENT_LAB_HOME/cogment`. This might require rerunning `cogmentlab install` or updating the environment variable.
+
 
 ## v0.1.2 - 2024-02-02
 
@@ -34,8 +39,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Dropped OpenCV as a requirement
 
+
 ## v0.1.0 - 2024-01-17
 
 ### Added
-
 - Initial release

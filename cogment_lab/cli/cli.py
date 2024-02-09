@@ -16,9 +16,10 @@ from __future__ import annotations
 
 import argparse
 import logging
-import os
-import subprocess
 import sys
+
+from cogment_lab.cli.download_cogment import download_cogment
+from cogment_lab.constants import COGMENT_LAB_HOME
 
 
 TEAL = "\033[36m"
@@ -36,34 +37,13 @@ logging.basicConfig(level=logging.INFO, handlers=[handler])
 sys.path.insert(0, "..")
 
 
-def install_cogment(path: str | None = None):
+def install_cogment():
+    install_dir = COGMENT_LAB_HOME
     try:
-        subprocess.run(
-            [
-                "curl",
-                "--silent",
-                "-L",
-                "https://raw.githubusercontent.com/cogment/cogment/main/install.sh",
-                "--output",
-                "install-cogment.sh",
-            ],
-            check=True,
-        )
-        subprocess.run(["chmod", "+x", "install-cogment.sh"], check=True)
-        cmd = ["sudo", "./install-cogment.sh"]
-        if path:
-            cmd += ["--install-dir", path]
-        cmd += ["--version", "2.19.1"]
-        if os.getenv("GITHUB_ACTIONS") == "true":
-            cmd = cmd[1:]  # Remove sudo for github actions
-        subprocess.run(cmd, check=True)
-        logging.info("Cogment installed successfully.")
-    except subprocess.CalledProcessError as e:
+        cogment_path = download_cogment(install_dir, "2.19.1")
+        logging.info(f"Cogment installed successfully in [{cogment_path}].")
+    except Exception as e:
         logging.error(f"Installation failed: {e}")
-    finally:
-        if os.path.exists("install-cogment.sh"):
-            os.remove("install-cogment.sh")
-            logging.info("Cleanup completed.")
 
 
 def main():
@@ -87,7 +67,7 @@ def main():
     args = parser.parse_args()
 
     if args.command == "install":
-        install_cogment(args.path)
+        install_cogment()
     elif args.command == "launch":
         from cogment_lab.cli import launch
 

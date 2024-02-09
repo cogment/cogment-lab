@@ -15,10 +15,13 @@
 import logging
 import subprocess
 
+from cogment_lab.constants import COGMENT_LAB_HOME
+
 
 def launch_service(service_name: str):
+    cogment_path = COGMENT_LAB_HOME / "cogment"
     try:
-        process = subprocess.Popen(["cogment", "services", service_name])
+        process = subprocess.Popen([cogment_path, "services", service_name])
         logging.info(f"{service_name} launched successfully. PID: {process.pid}")
         return process
     except Exception as e:
@@ -52,7 +55,6 @@ def launch_main(command: str):
         if process:
             processes.append(process)
 
-    # Optional: Wait for all subprocesses to complete
     for process in processes:
         process.wait()
 

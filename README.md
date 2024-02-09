@@ -2,9 +2,7 @@
 
 # Human + AI = ❤️
 
-
 ## <a href="https://cogment.ai/cogment_lab"><strong>Docs</strong></a> | <a href="https://ai-r.com/blog"><strong>Blog</strong></a> | <a href="https://discord.gg/kh3t6esJRy"><strong> Discord </strong></a>
-
 
 [![Package version](https://img.shields.io/pypi/v/cogment-lab?color=%23007ec6&label=pypi%20package)](https://pypi.org/project/cogment-lab)
 [![Downloads](https://pepy.tech/badge/cogment-lab)](https://pepy.tech/project/cogment-lab)
@@ -24,7 +22,7 @@ It's the perfect tool for when you want to interact with your environment yourse
 
 1. Activate your venv, conda env, or whatever you use to keep your python environment clean.
 2. Install cogment_lab with `pip install cogment_lab`
-3. Install cogment with `cogmentlab install`
+3. Install cogment in `COGMENT_LAB_HOME` folder with `cogmentlab install` (this environment variable defaults to `~/.cogment_lab`)
 4. In a separate terminal, run `cogmentlab launch base` to start the orchestrator and datastore. Keep it open.
 5. Run the tutorials, examples, or whatever you want to do.
 
@@ -48,12 +46,12 @@ allowing you to do your research without worries.
 
 Cogment Lab is inherently asynchronous - but if you're not familiar with async python, don't worry about it.
 The only things you need to remember are:
+
 - Wrap your code in `async def main()`
 - Run it with `asyncio.run(main())`
 - When calling certain functions use the `await` keyword, e.g. `data = await cog.get_episode_data(...)`
 
 If you are familiar with async programming, there's a lot of interesting things you can do with it - go crazy.
-
 
 ## Terminology
 
@@ -62,25 +60,23 @@ If you are familiar with async programming, there's a lot of interesting things 
 - An `agent` is what we typically think of as an agent in RL - something that perceives its environment and acts upon it. We do not attempt to solve the agent foundation problem in this documentation.
 - An `agent` is simultaneously the part of the environment that's taking an action - multiagent environments may have several agents, so we need to assign an actor to each agent.
 
-
 ## Known rough edges
 
 - When running the web UI, you can open the tab only once per launched process. So if you open the UI, you can run however many trials you want, as long as you don't close it. If you do close it, you should kill the process and start a new one.
-
 
 ## Local installation
 
 - Requires Python 3.10
 - Install requirements in a virtual env with something similar to the following
 
-    ```console
-    $ python -m venv .venv
-    $ source .venv/bin/activate
-    $ pip install -r requirements.txt
-    $ pip install -e .
-    ```
-- For the examples you'll need to install the additional `examples_requirements.txt`.
+  ```console
+  $ python -m venv .venv
+  $ source .venv/bin/activate
+  $ pip install -r requirements.txt
+  $ pip install -e .
+  ```
 
+- For the examples you'll need to install the additional `examples_requirements.txt`.
 
 ### Apple silicon installation
 
@@ -101,6 +97,7 @@ Run `cogmentlab launch base`.
 Then, run whatever scripts or notebooks.
 
 Terminology:
+
 - Model: a relatively raw PyTorch (or other?) model, inheriting from `nn.Module`
 - Agent: a model wrapped in some utility class to interact with np arrays
 - Actor: a cogment service that may involve models and/or actors
@@ -110,15 +107,15 @@ Terminology:
 People having maintainers rights of the repository can follow these steps to release a version **MAJOR.MINOR.PATCH**. The versioning scheme follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 1. Run `./scripts/create_release_branch.sh MAJOR.MINOR.PATCH`, this will automatically:
-    - update the version of the package, in `cogment_lab/version.py`,
-    - create a release branch with the changes at `release/vMAJOR.MINOR.PATCH` and push it.
+   - update the version of the package, in `cogment_lab/version.py`,
+   - create a release branch with the changes at `release/vMAJOR.MINOR.PATCH` and push it.
 2. On the release branch:
-    - Make sure the changelog, at `CHANGELOG.md`, reflects the changes since the last release,
-    - Fix any issue, making sure that the build passes on CI,
-    - Commit and push any changes.
+   - Make sure the changelog, at `CHANGELOG.md`, reflects the changes since the last release,
+   - Fix any issue, making sure that the build passes on CI,
+   - Commit and push any changes.
 3. Run `./scripts/tag_release.sh MAJOR.MINOR.PATCH`, this will automatically:
-    - create the specific version section in the changelog and push it to the release branch,
-    - merge the release branch in `main`,
-    - create the release tag and,
-    - update the `develop` to match the latest release.
+   - create the specific version section in the changelog and push it to the release branch,
+   - merge the release branch in `main`,
+   - create the release tag and,
+   - update the `develop` to match the latest release.
 4. The CI will automatically publish the package to PyPI.
