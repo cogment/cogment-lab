@@ -55,7 +55,6 @@ def launch_main(command: str):
         if process:
             processes.append(process)
 
-    # Optional: Wait for all subprocesses to complete
     for process in processes:
         process.wait()
 

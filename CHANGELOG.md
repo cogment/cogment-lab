@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - `cogmentlab install` no longer requires root access
 
+### Changed
+- The `cogmentlab` command now uses the `cogment` executable stored in `$COGMENT_LAB_HOME/bin/cogment`. This might require rerunning `cogmentlab install` or updating the environment variable.
+
 
 ## v0.1.2 - 2024-02-02
 
