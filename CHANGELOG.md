@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## v0.1.3 - 2024-02-09
 
+## v0.1.3 - 2024-02-09
+
 ### Fixed
 - `cogmentlab install` no longer requires root access
 
