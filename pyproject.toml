@@ -56,7 +56,7 @@ all = [
     "torch",
     "matplotlib",
     "wandb>=0.13.9",
-    "hatch>=1.9.1",
+    "hatch>=1.7.0",
     "ruff>=0.1.7",
     "jupyter>=1.0.0",
     "jupyterlab>=3.5.3",

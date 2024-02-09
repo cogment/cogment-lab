@@ -33,7 +33,7 @@ RUN apt-get -y update \
 COPY . /usr/local/cogment_lab/
 WORKDIR /usr/local/cogment_lab/
 
-RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install --upgrade pip
 RUN pip install .[all] --no-cache-dir
 
 ENV PATH="/usr/local/bin:${PATH}"
