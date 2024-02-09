@@ -17,7 +17,7 @@ from __future__ import annotations
 import abc
 import copy
 import logging
-from typing import Awaitable, Callable, Generic, TypeVar
+from typing import Awaitable, Callable, Dict, Generic, TypeVar
 
 import cogment
 import numpy as np
@@ -30,14 +30,14 @@ from cogment_lab.specs import AgentSpecs
 
 
 Action = TypeVar("Action")
-Actions = dict[str, Action]
+Actions = Dict[str, Action]
 
 Observation = TypeVar("Observation")
-Observations = dict[str, Observation]
+Observations = Dict[str, Observation]
 
-Rewards = dict[str, float]
+Rewards = Dict[str, float]
 
-Dones = dict[str, bool]
+Dones = Dict[str, bool]
 
 
 class State:
