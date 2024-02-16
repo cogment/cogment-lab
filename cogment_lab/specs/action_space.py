@@ -17,8 +17,7 @@ from __future__ import annotations
 import gymnasium as gym
 
 from cogment_lab.generated.data_pb2 import PlayerAction  # type: ignore
-
-from .ndarray_serialization import deserialize_ndarray, serialize_ndarray
+from cogment_lab.specs import deserialize_ndarray, serialize_ndarray
 
 
 # pylint: disable=attribute-defined-outside-init

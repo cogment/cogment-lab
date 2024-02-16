@@ -27,7 +27,7 @@ from tqdm.auto import tqdm
 
 from cogment_lab.generated import cog_settings
 from cogment_lab.specs import AgentSpecs
-from cogment_lab.utils.grpc import extend_actor_config
+from cogment_lab.utils import extend_actor_config
 
 
 def get_actor_params(

@@ -12,5 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .encode_rendered_frame import encode_rendered_frame
-from .environment_specs import AgentSpecs
+from cogment_lab.specs.action_space import Action, ActionSpace
+from cogment_lab.specs.encode_rendered_frame import (
+    decode_rendered_frame,
+    encode_rendered_frame,
+)
+from cogment_lab.specs.environment_specs import AgentSpecs
+from cogment_lab.specs.ndarray_serialization import (
+    SerializationFormat,
+    deserialize_ndarray,
+    serialize_ndarray,
+)
+from cogment_lab.specs.observation_space import Observation, ObservationSpace
+from cogment_lab.specs.spaces_serialization import (
+    deserialize_space,
+    serialize_gym_space,
+)

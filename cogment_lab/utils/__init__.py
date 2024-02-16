@@ -12,4 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .import_class import import_object
+from cogment_lab.utils.grpc import extend_actor_config
+from cogment_lab.utils.import_class import import_object
+from cogment_lab.utils.runners import process_cleanup, setup_logging
+from cogment_lab.utils.trial_utils import (
+    TrialData,
+    format_data_multiagent,
+    get_actor_params,
+)

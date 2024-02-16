@@ -17,7 +17,7 @@ import torch
 from coltra import Agent
 from coltra.buffers import Action, Observation, OnPolicyRecord
 
-from cogment_lab.utils.trial_utils import TrialData
+from cogment_lab.utils import TrialData
 
 
 def convert_trial_data_to_coltra(trial_data: TrialData, agent: Agent) -> OnPolicyRecord:

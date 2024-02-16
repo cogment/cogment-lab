@@ -12,4 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .simple import ConstantActor, RandomActor
+from cogment_lab.actors.runner import actor_runner
+from cogment_lab.actors.simple import ConstantActor, RandomActor

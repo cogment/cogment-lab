@@ -16,13 +16,15 @@ from __future__ import annotations
 
 import gymnasium as gym
 
+from cogment_lab.constants import DEFAULT_RENDERED_WIDTH
 from cogment_lab.generated.data_pb2 import AgentSpecs as PbAgentSpecs  # type: ignore
-
-from ..constants import DEFAULT_RENDERED_WIDTH
-from .action_space import ActionSpace
-from .ndarray_serialization import SerializationFormat
-from .observation_space import ObservationSpace
-from .spaces_serialization import deserialize_space, serialize_gym_space
+from cogment_lab.specs import (
+    ActionSpace,
+    ObservationSpace,
+    SerializationFormat,
+    deserialize_space,
+    serialize_gym_space,
+)
 
 
 class AgentSpecs:

@@ -21,7 +21,7 @@ import cogment
 
 from cogment_lab.core import BaseActor
 from cogment_lab.generated import cog_settings
-from cogment_lab.utils.runners import setup_logging
+from cogment_lab.utils import setup_logging
 
 
 async def register_actor(actor: BaseActor, actor_name: str, queue: Queue, port: int = 9002):

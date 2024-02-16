@@ -18,7 +18,7 @@ import argparse
 import logging
 import sys
 
-from cogment_lab.cli.download_cogment import download_cogment
+from cogment_lab.cli import download_cogment
 from cogment_lab.constants import COGMENT_LAB_HOME
 
 

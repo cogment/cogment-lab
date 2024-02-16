@@ -21,8 +21,7 @@ from cogment_lab.generated.spaces_pb2 import Discrete  # type: ignore
 from cogment_lab.generated.spaces_pb2 import MultiBinary  # type: ignore
 from cogment_lab.generated.spaces_pb2 import MultiDiscrete  # type: ignore
 from cogment_lab.generated.spaces_pb2 import Space  # type: ignore
-
-from .ndarray_serialization import (
+from cogment_lab.specs import (
     SerializationFormat,
     deserialize_ndarray,
     serialize_ndarray,

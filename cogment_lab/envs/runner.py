@@ -24,7 +24,7 @@ import cogment
 
 from cogment_lab.core import BaseEnv
 from cogment_lab.generated import cog_settings
-from cogment_lab.utils.runners import setup_logging
+from cogment_lab.utils import setup_logging
 
 
 async def register_env(env: BaseEnv, env_name: str, signal_queue: Queue, port: int = 9001):

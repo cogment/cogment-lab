@@ -17,9 +17,12 @@ import numpy as np
 
 from cogment_lab.constants import DEFAULT_RENDERED_WIDTH
 from cogment_lab.generated.data_pb2 import Observation as PbObservation  # type: ignore
-
-from .encode_rendered_frame import decode_rendered_frame, encode_rendered_frame
-from .ndarray_serialization import deserialize_ndarray, serialize_ndarray
+from cogment_lab.specs import (
+    decode_rendered_frame,
+    deserialize_ndarray,
+    encode_rendered_frame,
+    serialize_ndarray,
+)
 
 
 # pylint: disable=attribute-defined-outside-init

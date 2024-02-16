@@ -19,8 +19,8 @@ import signal
 from multiprocessing import Queue
 from typing import Any
 
-from cogment_lab.humans.actor import run_cogment_actor, start_fastapi
-from cogment_lab.utils.runners import setup_logging
+from cogment_lab.humans import run_cogment_actor, start_fastapi
+from cogment_lab.utils import setup_logging
 
 
 # def human_actor_runner(

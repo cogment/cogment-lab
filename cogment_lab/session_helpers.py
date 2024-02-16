@@ -21,9 +21,13 @@ from cogment.environment import EnvironmentSession
 from cogment.model_registry_v2 import ModelRegistry
 from cogment.session import ActorInfo, RecvEvent
 
-from cogment_lab.specs import AgentSpecs
-from cogment_lab.specs.action_space import Action, ActionSpace
-from cogment_lab.specs.observation_space import Observation, ObservationSpace
+from cogment_lab.specs import (
+    Action,
+    ActionSpace,
+    AgentSpecs,
+    Observation,
+    ObservationSpace,
+)
 
 
 class ActorSessionHelper:

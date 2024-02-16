@@ -29,16 +29,12 @@ import cogment
 from cogment.control import Controller
 from cogment.datastore import Datastore
 
-from cogment_lab.actors.runner import actor_runner
+from cogment_lab.actors import actor_runner
 from cogment_lab.core import BaseActor, BaseEnv
-from cogment_lab.envs.runner import env_runner
+from cogment_lab.envs import env_runner
 from cogment_lab.generated import cog_settings, data_pb2
-from cogment_lab.humans.runner import human_actor_runner
-from cogment_lab.utils.trial_utils import (
-    TrialData,
-    format_data_multiagent,
-    get_actor_params,
-)
+from cogment_lab.humans import human_actor_runner
+from cogment_lab.utils import TrialData, format_data_multiagent, get_actor_params
 
 
 AgentName = str

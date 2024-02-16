@@ -18,7 +18,7 @@ import datetime
 from cogment_lab.actors import ConstantActor, RandomActor
 from cogment_lab.envs.gymnasium import GymEnvironment
 from cogment_lab.process_manager import Cogment
-from cogment_lab.utils.trial_utils import format_data_multiagent
+from cogment_lab.utils import format_data_multiagent
 
 
 async def main():

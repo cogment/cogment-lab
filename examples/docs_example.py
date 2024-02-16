@@ -18,7 +18,7 @@ import datetime
 from cogment_lab import Cogment
 from cogment_lab.actors import ConstantActor, RandomActor
 from cogment_lab.envs import GymEnvironment
-from cogment_lab.utils.runners import process_cleanup
+from cogment_lab.utils import process_cleanup
 
 
 LUNAR_LANDER_ACTIONS = ["no-op", "ArrowRight", "ArrowUp", "ArrowLeft"]

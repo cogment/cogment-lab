@@ -14,3 +14,4 @@
 
 from cogment_lab.envs.gymnasium import GymEnvironment
 from cogment_lab.envs.pettingzoo import AECEnvironment, ParallelEnvironment
+from cogment_lab.envs.runner import env_runner, register_env
