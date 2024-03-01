@@ -17,10 +17,13 @@
 
         document.getElementById('start-button').addEventListener('click', function() {
             if (!isConnected) {
-                socket = new WebSocket("ws://" + location.host + "/ws");
+                const wsProtocol = location.protocol === 'https:' ? 'wss://' : 'ws://';
+
+                socket = new WebSocket(wsProtocol + location.host + "/ws");
                 socket.onmessage = function(event) {
-                    var landerImage = document.getElementById('env-render');
-                    landerImage.src = event.data;
+                    let image = document.getElementById('env-render');
+                    let json = JSON.parse(event.data);
+                    image.src = json['image'];
                 };
                 isConnected = true;
                 this.style.display = 'none'; // Hide the button after it's clicked
