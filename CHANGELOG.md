@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
-## v0.1.3 - 2024-02-09
+## v0.1.4 - 2024-02-09
+
+### Changed
+- Web UI now receives both the observation and the rendered frame
+- Web UI can work on http and https
 
 ## v0.1.3 - 2024-02-09
 
