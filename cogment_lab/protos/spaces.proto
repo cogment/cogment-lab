@@ -44,6 +44,12 @@ message Dict {
   repeated SubSpace spaces = 1;
 }
 
+message Text {
+  int32 max_length = 1;
+  int32 min_length = 2;
+  string charset = 3;
+}
+
 message Space {
   oneof kind {
     Discrete discrete = 1;
@@ -51,5 +57,6 @@ message Space {
     Dict dict = 3;
     MultiBinary multi_binary = 4;
     MultiDiscrete multi_discrete = 5;
+    Text text = 6;
   }
 }

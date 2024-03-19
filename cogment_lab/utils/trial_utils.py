@@ -106,6 +106,8 @@ def initialize_buffer(space: gym.Space | None, length: int) -> np.ndarray | dict
         return {key: np.empty((length,) + space[key].shape, dtype=space[key].dtype) for key in space.spaces.keys()}  # type: ignore
     elif isinstance(space, gym.spaces.Tuple):
         return {i: np.empty((length,) + space[i].shape, dtype=space[i].dtype) for i in range(len(space.spaces))}  # type: ignore
+    elif isinstance(space, gym.spaces.Text):
+        return np.empty((length,), dtype="<U" + str(space.max_length))
     else:  # Simple space
         assert isinstance(space, gym.spaces.Space)
         assert space.shape is not None

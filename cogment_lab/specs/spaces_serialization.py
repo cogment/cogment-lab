@@ -21,6 +21,7 @@ from cogment_lab.generated.spaces_pb2 import Discrete  # type: ignore
 from cogment_lab.generated.spaces_pb2 import MultiBinary  # type: ignore
 from cogment_lab.generated.spaces_pb2 import MultiDiscrete  # type: ignore
 from cogment_lab.generated.spaces_pb2 import Space  # type: ignore
+from cogment_lab.generated.spaces_pb2 import Text  # type: ignore
 
 from .ndarray_serialization import (
     SerializationFormat,
@@ -64,6 +65,10 @@ def serialize_gym_space(space: gym.Space, serialization_format=SerializationForm
         for key, gym_sub_space in space.spaces.items():
             spaces.append(Dict.SubSpace(key=key, space=serialize_gym_space(gym_sub_space)))
         return Space(dict=Dict(spaces=spaces))
+
+    if isinstance(space, gym.spaces.Text):
+        return Space(text=Text(max_length=space.max_length, min_length=space.min_length, charset=space.characters))
+
     raise RuntimeError(f"[{type(space)}] is not a supported space type")
 
 
@@ -98,5 +103,12 @@ def deserialize_space(pb_space: Space) -> gym.Space:
             spaces.append((sub_space.key, deserialize_space(sub_space.space)))
 
         return gym.spaces.Dict(spaces=spaces)
+    if space_kind == "text":
+        text_space_pb = pb_space.text
+        return gym.spaces.Text(
+            max_length=text_space_pb.max_length,
+            min_length=text_space_pb.min_length,
+            charset=text_space_pb.charset,
+        )
 
     raise RuntimeError(f"[{space_kind}] is not a supported space kind")

@@ -24,6 +24,7 @@ from cogment_lab.generated.ndarray_pb2 import DTYPE_FLOAT64  # type: ignore
 from cogment_lab.generated.ndarray_pb2 import DTYPE_INT8  # type: ignore
 from cogment_lab.generated.ndarray_pb2 import DTYPE_INT32  # type: ignore
 from cogment_lab.generated.ndarray_pb2 import DTYPE_INT64  # type: ignore
+from cogment_lab.generated.ndarray_pb2 import DTYPE_STRING  # type: ignore
 from cogment_lab.generated.ndarray_pb2 import DTYPE_UINT8  # type: ignore
 from cogment_lab.generated.ndarray_pb2 import DTYPE_UNKNOWN  # type: ignore
 from cogment_lab.generated.ndarray_pb2 import Array  # type: ignore
@@ -45,6 +46,7 @@ DTYPE_FROM_PB_DTYPE = {
     DTYPE_INT32: np.dtype("int32"),
     DTYPE_INT64: np.dtype("int64"),
     DTYPE_UINT8: np.dtype("uint8"),
+    DTYPE_STRING: np.dtype("str"),
 }
 
 DOUBLE_DTYPES = frozenset(["float32", "float64"])
@@ -64,7 +66,7 @@ def serialize_ndarray(
     serialization_format: SerializationFormat = SerializationFormat.RAW,
 ) -> Array:
     str_dtype = str(nd_array.dtype)
-    pb_dtype = PB_DTYPE_FROM_DTYPE.get(str_dtype, DTYPE_UNKNOWN)
+    pb_dtype = DTYPE_STRING if "U" in str_dtype else PB_DTYPE_FROM_DTYPE.get(str_dtype, DTYPE_UNKNOWN)
 
     # SerializationFormat.RAW
     if serialization_format is SerializationFormat.RAW:
@@ -109,6 +111,12 @@ def serialize_ndarray(
             dtype=pb_dtype,
             int64_data=nd_array.ravel(order="C").tolist(),
         )
+    if "U" in str_dtype:
+        return Array(
+            shape=nd_array.shape,
+            dtype=pb_dtype,
+            string_data=nd_array.ravel(order="C").tolist(),
+        )
 
     raise RuntimeError(
         f"[{str_dtype}] is not a supported numpy dtype for serialization format [{serialization_format}]"
@@ -136,6 +144,8 @@ def deserialize_ndarray(pb_array: Array) -> np.ndarray | None:
         return np.array(pb_array.int32_data, dtype=dtype).reshape(shape, order="C")
     if str_dtype in INT64_DTYPES:
         return np.array(pb_array.int64_data, dtype=dtype).reshape(shape, order="C")
+    if "U" in str_dtype:
+        return np.array(pb_array.string_data).reshape(shape, order="C")
 
     return None
     # raise RuntimeError(

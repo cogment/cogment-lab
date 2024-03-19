@@ -24,6 +24,7 @@ enum DType {
   DTYPE_INT32 = 4;
   DTYPE_INT64 = 5;
   DTYPE_UINT8 = 6;
+  DTYPE_STRING = 7;
 }
 
 message Array {
@@ -35,4 +36,5 @@ message Array {
   repeated sint32 int32_data = 6;
   repeated sint64 int64_data = 7;
   repeated uint32 uint32_data = 8;
+  repeated string string_data = 9;
 }
