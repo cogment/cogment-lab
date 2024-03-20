@@ -33,6 +33,7 @@ from cogment_lab.actors.runner import actor_runner
 from cogment_lab.core import BaseActor, BaseEnv
 from cogment_lab.envs.runner import env_runner
 from cogment_lab.generated import cog_settings, data_pb2
+from cogment_lab.humans.gradio_runner import gradio_actor_runner
 from cogment_lab.humans.runner import human_actor_runner
 from cogment_lab.utils.trial_utils import (
     TrialData,
@@ -338,6 +339,42 @@ class Cogment:
 
         self.actor_ports["web_ui"] = cogment_port
 
+        return self.is_ready(signal_queue)
+
+    def run_gradio_ui(
+        self,
+        app_port: int = 7860,  # TODO: currently doesn't work
+        cogment_port: int = 8998,
+        log_file: str | None = None,
+    ) -> Coroutine[None, None, bool]:
+        """Runs the human actor in a separate process
+
+        Args:
+            app_port (int, optional): Port for web UI. Defaults to 8000.
+            cogment_port (int, optional): Port for Cogment connection. Defaults to 8999.
+            log_file (str | None, optional): Log file path. Defaults to None.
+
+        Returns:
+            bool: Whether the web UI startup succeeded
+        """
+
+        signal_queue = Queue(1)
+
+        if self.log_dir is not None and log_file:
+            log_file = os.path.join(self.log_dir, log_file)
+
+        self._add_process(
+            target=gradio_actor_runner,
+            name="gradio",
+            args=(
+                cogment_port,
+                signal_queue,
+                log_file,
+            ),
+        )
+        logging.info(f"Started gradio UI on port {app_port} with log file {log_file}")
+
+        self.actor_ports["gradio"] = cogment_port
         return self.is_ready(signal_queue)
 
     def stop_service(self, name: ImplName, timeout: float = 1.0):
