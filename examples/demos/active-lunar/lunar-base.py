@@ -20,7 +20,6 @@ import numpy as np
 import torch
 import wandb
 from coltra.models import FCNetwork
-from shared import ReplayBuffer, dqn_loss, get_current_eps
 from torch import optim
 from tqdm import trange
 from typarse import BaseParser
@@ -29,6 +28,7 @@ from cogment_lab.actors.nn_actor import NNActor
 from cogment_lab.envs import GymEnvironment
 from cogment_lab.process_manager import Cogment
 from cogment_lab.utils.runners import process_cleanup
+from shared import ReplayBuffer, dqn_loss, get_current_eps
 
 
 class Parser(BaseParser):
