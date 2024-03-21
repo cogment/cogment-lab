@@ -2,13 +2,15 @@ import asyncio
 import json
 import logging
 import multiprocessing as mp
-from typing import Any
+import signal
+from typing import Any, Callable
 
 import cogment
 import numpy as np
 
 from cogment_lab.core import CogmentActor
 from cogment_lab.generated import cog_settings
+from cogment_lab.utils.runners import setup_logging
 
 
 def obs_to_msg(obs: np.ndarray | dict[str, np.ndarray | dict]) -> dict[str, Any]:
@@ -64,3 +66,75 @@ async def run_cogment_actor(port: int, send_queue: asyncio.Queue, recv_queue: as
 
     signal_queue.put(True)
     await serve
+
+
+async def shutdown():
+    tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+    for task in tasks:
+        task.cancel()
+    await asyncio.gather(*tasks, return_exceptions=True)
+    asyncio.get_event_loop().stop()
+
+
+def signal_handler(sig, frame):
+    asyncio.create_task(shutdown())
+
+
+async def gradio_actor_main(
+    cogment_port: int,
+    gradio_app_fn: Callable[[mp.Queue, mp.Queue, str], None],
+    signal_queue: mp.Queue,
+    log_file: str | None = None,
+):
+    gradio_to_actor = mp.Queue()
+    actor_to_gradio = mp.Queue()
+
+    logging.info("Starting gradio interface")
+    process = mp.Process(target=gradio_app_fn, args=(gradio_to_actor, actor_to_gradio, log_file))
+    process.start()
+
+    try:
+        logging.info("Starting cogment actor")
+        cogment_task = asyncio.create_task(
+            run_cogment_actor(
+                port=cogment_port,
+                send_queue=actor_to_gradio,
+                recv_queue=gradio_to_actor,
+                signal_queue=signal_queue,
+            )
+        )
+
+        logging.info("Waiting for cogment actor to finish")
+
+        await cogment_task
+    finally:
+        process.terminate()
+        process.join()
+
+
+def gradio_actor_runner(
+    cogment_port: int,
+    gradio_app_fn: Callable[[mp.Queue, mp.Queue, str], None],
+    signal_queue: mp.Queue,
+    log_file: str | None = None,
+):
+    if log_file:
+        setup_logging(log_file)
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    for sig in [signal.SIGINT, signal.SIGTERM]:
+        loop.add_signal_handler(sig, lambda s=sig, frame=None: signal_handler(s, frame))
+
+    try:
+        loop.run_until_complete(
+            gradio_actor_main(
+                cogment_port=cogment_port,
+                gradio_app_fn=gradio_app_fn,
+                signal_queue=signal_queue,
+                log_file=log_file,
+            )
+        )
+    finally:
+        loop.run_until_complete(shutdown())
+        loop.close()

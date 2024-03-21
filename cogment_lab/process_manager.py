@@ -33,7 +33,7 @@ from cogment_lab.actors.runner import actor_runner
 from cogment_lab.core import BaseActor, BaseEnv
 from cogment_lab.envs.runner import env_runner
 from cogment_lab.generated import cog_settings, data_pb2
-from cogment_lab.humans.gradio_runner import gradio_actor_runner
+from cogment_lab.humans.gradio_actor import gradio_actor_runner
 from cogment_lab.humans.runner import human_actor_runner
 from cogment_lab.utils.trial_utils import (
     TrialData,
@@ -343,7 +343,7 @@ class Cogment:
 
     def run_gradio_ui(
         self,
-        app_port: int = 7860,  # TODO: currently doesn't work
+        gradio_app_fn: Callable[[mp.Queue, mp.Queue, str], None],
         cogment_port: int = 8998,
         log_file: str | None = None,
     ) -> Coroutine[None, None, bool]:
@@ -368,11 +368,12 @@ class Cogment:
             name="gradio",
             args=(
                 cogment_port,
+                gradio_app_fn,
                 signal_queue,
                 log_file,
             ),
         )
-        logging.info(f"Started gradio UI on port {app_port} with log file {log_file}")
+        logging.info(f"Started gradio UI on a port with log file {log_file}")
 
         self.actor_ports["gradio"] = cogment_port
         return self.is_ready(signal_queue)
