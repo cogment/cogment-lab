@@ -1,3 +1,17 @@
+# Copyright 2024 AI Redefined Inc. <dev+cogment@ai-r.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from __future__ import annotations
 
 import asyncio
@@ -47,13 +61,17 @@ class GradioActor(CogmentActor):
         self.recv_queue = recv_queue
 
     async def act(self, observation: Any, rendered_frame: np.ndarray | None = None) -> int:
-        logging.info(f"Received observation {observation} and frame inside gradio actor")
+        # logging.info(f"Received observation {observation} and frame inside gradio actor")
         obs_data = obs_to_msg(observation)
         self.send_queue.put((obs_data, rendered_frame))
-        logging.info(f"Sent observation {obs_data} and frame inside gradio actor")
+        # logging.info(f"Sent observation {obs_data} and frame inside gradio actor")
         action = self.recv_queue.get()
-        logging.info(f"Received action {action} inside gradio actor")
+        # logging.info(f"Received action {action} inside gradio actor")
         return action
+
+    async def on_ending(self, observation, rendered_frame):
+        obs_data = obs_to_msg(observation)
+        self.send_queue.put((obs_data, rendered_frame))
 
 
 async def run_cogment_actor(port: int, send_queue: asyncio.Queue, recv_queue: asyncio.Queue, signal_queue: mp.Queue):
