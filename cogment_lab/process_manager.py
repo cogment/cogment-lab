@@ -350,7 +350,7 @@ class Cogment:
         """Runs the human actor in a separate process
 
         Args:
-            app_port (int, optional): Port for web UI. Defaults to 8000.
+            gradio_app_fn (Callable[[mp.Queue, mp.Queue, str], None]): Function that runs the Gradio app
             cogment_port (int, optional): Port for Cogment connection. Defaults to 8999.
             log_file (str | None, optional): Log file path. Defaults to None.
 

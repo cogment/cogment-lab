@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
-## v0.1.4 - 2024-03-02
+## v0.1.5 - 2024-03-25
+
+### Added
+- Cogment Lab can now be used with Text spaces in Gymnasium
+- Added support for gradio-based web UIs
 
 ## v0.1.4 - 2024-02-09
 
