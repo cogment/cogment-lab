@@ -103,9 +103,11 @@ def initialize_buffer(space: gym.Space | None, length: int) -> np.ndarray | dict
     if space is None:
         return np.empty((length,), dtype=np.float32)
     elif isinstance(space, gym.spaces.Dict):
-        return {key: np.empty((length,) + space[key].shape, dtype=space[key].dtype) for key in space.spaces.keys()}  # type: ignore
+        return {key: initialize_buffer(space[key], length) for key in space.spaces.keys()}  # type: ignore
     elif isinstance(space, gym.spaces.Tuple):
-        return {i: np.empty((length,) + space[i].shape, dtype=space[i].dtype) for i in range(len(space.spaces))}  # type: ignore
+        return {i: initialize_buffer(space[i], length) for i in range(len(space.spaces))}  # type: ignore
+    elif isinstance(space, gym.spaces.Text):
+        return np.empty((length,), dtype="<U" + str(space.max_length))
     else:  # Simple space
         assert isinstance(space, gym.spaces.Space)
         assert space.shape is not None
@@ -128,7 +130,7 @@ def write_to_buffer(
     """
     if isinstance(buffer, dict):
         for key in buffer.keys():
-            buffer[key][idx] = data[key]  # type: ignore
+            write_to_buffer(buffer[key], data[key], idx)
     else:
         buffer[idx] = data
 

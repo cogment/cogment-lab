@@ -16,14 +16,20 @@ from importlib import import_module
 
 
 def import_object(class_name: str):
-    """Imports an object from a module based on a string
+    """
+    Imports an object from a module based on a string.
+    If the argument is a string without any dots, it's taken from the current namespace.
 
     Args:
         class_name (str): The full path to the object e.g. "package.module.Class"
+                          or the name of the object in the current namespace.
 
     Returns:
         object: The imported object
     """
-    module_path, class_name = class_name.rsplit(".", 1)
-    module = import_module(module_path)
-    return getattr(module, class_name)
+    if "." not in class_name:
+        return globals()[class_name]
+    else:
+        module_path, class_name = class_name.rsplit(".", 1)
+        module = import_module(module_path)
+        return getattr(module, class_name)

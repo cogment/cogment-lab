@@ -240,6 +240,10 @@ class CogmentActor(BaseActor, abc.ABC, Generic[Observation, Action]):
         """Handle received messages."""
         pass
 
+    async def on_ending(self, observation, rendered_frame):
+        """Handle trial ending."""
+        pass
+
     async def end(self):
         """Clean up when done."""
         pass
@@ -250,9 +254,16 @@ class CogmentActor(BaseActor, abc.ABC, Generic[Observation, Action]):
         async for event in actor_session.all_events():
             event: RecvEvent
             self.current_event = event
-            if event.type != cogment.EventType.ACTIVE:
+            if event.type not in (cogment.EventType.ACTIVE, cogment.EventType.ENDING):
                 logging.info(f"Skipping event of type {event.type}")
                 continue
+
+            if event.type == cogment.EventType.ENDING:
+                observation = self.session_helper.get_observation(event)
+                await self.on_ending(observation.value, observation.rendered_frame)
+                continue
+
+            # type = ACTIVE
 
             if event.observation:
                 observation = self.session_helper.get_observation(event)

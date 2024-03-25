@@ -23,27 +23,6 @@ from cogment_lab.humans.actor import run_cogment_actor, start_fastapi
 from cogment_lab.utils.runners import setup_logging
 
 
-# def human_actor_runner(
-#     app_port: int = 8000,
-#     cogment_port: int = 8999,
-#     log_file: str | None = None
-# ):
-#     """Runs the human actor along with the FastAPI server"""
-#     if log_file:
-#         setup_logging(log_file)
-#
-#     # Queues for communication between FastAPI and Cogment actor
-#     app_to_actor = asyncio.Queue()
-#     actor_to_app = asyncio.Queue()
-#
-#     # Asyncio tasks for the FastAPI server and Cogment actor
-#     fastapi_task = start_fastapi(port=app_port, send_queue=app_to_actor, recv_queue=actor_to_app)
-#     cogment_task = asyncio.create_task(run_cogment_actor(port=cogment_port, send_queue=actor_to_app, recv_queue=app_to_actor))
-#
-#     # Run the asyncio event loop
-#     asyncio.run(asyncio.gather(fastapi_task, cogment_task))
-
-
 async def shutdown():
     tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
     for task in tasks:

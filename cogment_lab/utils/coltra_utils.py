@@ -14,7 +14,7 @@
 
 import numpy as np
 import torch
-from coltra import Agent
+from coltra import Agent, DAgent
 from coltra.buffers import Action, Observation, OnPolicyRecord
 
 from cogment_lab.utils.trial_utils import TrialData
@@ -36,6 +36,8 @@ def convert_trial_data_to_coltra(trial_data: TrialData, agent: Agent) -> OnPolic
     done = trial_data.done
     # state = None  # Assuming 'state' is not provided in TrialData
 
+    is_discrete = isinstance(agent, DAgent)
+
     # last_value = agent.act(Observation(vector=trial_data.last_observation), get_value=True)[2]["value"]
     # value = agent.act(Observation(vector=trial_data.observations), get_value=True)[2]["value"]
 
@@ -49,10 +51,12 @@ def convert_trial_data_to_coltra(trial_data: TrialData, agent: Agent) -> OnPolic
     if obs is None or action is None or reward is None or done is None:
         raise ValueError("Missing required fields in TrialData for conversion")
 
+    action_args = {"discrete": action} if is_discrete else {"continuous": action}
+
     # Create an OnPolicyRecord instance with the mapped fields
     on_policy_record = OnPolicyRecord(
         obs=Observation(vector=obs).tensor(),  # type: ignore
-        action=Action(discrete=action).tensor(),  # type: ignore
+        action=Action(**action_args).tensor(),  # type: ignore
         reward=torch.tensor(reward.astype(np.float32)),
         value=torch.tensor(value.astype(np.float32)),
         done=torch.tensor(done.astype(np.float32)),
