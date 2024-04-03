@@ -112,7 +112,7 @@ def deserialize_space(pb_space: Space) -> gym.Space:
     if space_kind == "tuple":
         tuple_space_pb = pb_space.tuple
         spaces = [deserialize_space(sub_space) for sub_space in tuple_space_pb.spaces]
-        return gym.spaces.Tuple(spaces)
+        return gym.spaces.Tuple(spaces=spaces)
     if space_kind == "text":
         text_space_pb = pb_space.text
         return gym.spaces.Text(
