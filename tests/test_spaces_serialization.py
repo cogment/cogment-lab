@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import gymnasium
 import numpy as np
 import pytest
 from gymnasium.spaces import Box, Dict, Discrete, MultiBinary, MultiDiscrete, Tuple
 
-
 from cogment_lab.specs.ndarray_serialization import SerializationFormat
-from cogment_lab.specs.spaces_serialization import deserialize_space, serialize_gym_space
+from cogment_lab.specs.spaces_serialization import serialize_gym_space
+
 
 # pylint: disable=no-member
 

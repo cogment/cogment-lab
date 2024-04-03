@@ -68,4 +68,3 @@ message Space {
     Text text = 7;
   }
 }
-

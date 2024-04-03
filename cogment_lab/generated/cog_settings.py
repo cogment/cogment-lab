@@ -1,10 +1,11 @@
-
-import cogment as _cog
 from types import SimpleNamespace
 
+import cogment as _cog
+
+import cogment_lab.generated.data_pb2 as data_pb
 import cogment_lab.generated.ndarray_pb2 as ndarray_pb
 import cogment_lab.generated.spaces_pb2 as spaces_pb
-import cogment_lab.generated.data_pb2 as data_pb
+
 
 _player_class = _cog.actor.ActorClass(
             name="player",
