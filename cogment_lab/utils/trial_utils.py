@@ -179,7 +179,8 @@ def extract_data_from_samples(
         data.rewards = initialize_buffer(None, sample_count - 1)  # type: ignore
     if "done" in fields:
         data.done = initialize_buffer(None, sample_count - 1)  # type: ignore
-        data.done[-1] = True  # type: ignore
+        if sample_count > 1:
+            data.done[-1] = True  # type: ignore
     if "next_observations" in fields:
         data.next_observations = initialize_buffer(observation_space, sample_count - 1)
     if "last_observation" in fields:
