@@ -198,7 +198,7 @@ class GymEnvironment(CogmentEnv):
 
         logging.info("Resetting environment")
 
-        obs, _info = state.env.reset(seed=state.session_cfg.seed, options=state.session_cfg.reset_args)  # THIS
+        obs, _info = state.env.reset(seed=state.session_cfg.seed, options=state.session_cfg.reset_args)
 
         state.observation_space = state.session_helper.get_observation_space(self.actor_name)
         frame = state.env.render() if state.session_cfg.render else None
