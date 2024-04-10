@@ -17,8 +17,9 @@
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
+from google.protobuf import message as _message
+from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-from google.protobuf.internal import builder as _builder
 
 
 # @@protoc_insertion_point(imports)
@@ -29,10 +30,92 @@ _sym_db = _symbol_database.Default()
 import cogment_lab.generated.ndarray_pb2 as ndarray__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0cspaces.proto\x12\x12\x63ogment_lab.spaces\x1a\rndarray.proto\"$\n\x08\x44iscrete\x12\t\n\x01n\x18\x01 \x01(\x05\x12\r\n\x05start\x18\x02 \x01(\x05\"Z\n\x03\x42ox\x12(\n\x03low\x18\x02 \x01(\x0b\x32\x1b.cogment_lab.nd_array.Array\x12)\n\x04high\x18\x03 \x01(\x0b\x32\x1b.cogment_lab.nd_array.Array\"5\n\x0bMultiBinary\x12&\n\x01n\x18\x01 \x01(\x0b\x32\x1b.cogment_lab.nd_array.Array\":\n\rMultiDiscrete\x12)\n\x04nvec\x18\x01 \x01(\x0b\x32\x1b.cogment_lab.nd_array.Array\"|\n\x04\x44ict\x12\x31\n\x06spaces\x18\x01 \x03(\x0b\x32!.cogment_lab.spaces.Dict.SubSpace\x1a\x41\n\x08SubSpace\x12\x0b\n\x03key\x18\x01 \x01(\t\x12(\n\x05space\x18\x02 \x01(\x0b\x32\x19.cogment_lab.spaces.Space\"?\n\x04Text\x12\x12\n\nmax_length\x18\x01 \x01(\x05\x12\x12\n\nmin_length\x18\x02 \x01(\x05\x12\x0f\n\x07\x63harset\x18\x03 \x01(\t\"\xb3\x02\n\x05Space\x12\x30\n\x08\x64iscrete\x18\x01 \x01(\x0b\x32\x1c.cogment_lab.spaces.DiscreteH\x00\x12&\n\x03\x62ox\x18\x02 \x01(\x0b\x32\x17.cogment_lab.spaces.BoxH\x00\x12(\n\x04\x64ict\x18\x03 \x01(\x0b\x32\x18.cogment_lab.spaces.DictH\x00\x12\x37\n\x0cmulti_binary\x18\x04 \x01(\x0b\x32\x1f.cogment_lab.spaces.MultiBinaryH\x00\x12;\n\x0emulti_discrete\x18\x05 \x01(\x0b\x32!.cogment_lab.spaces.MultiDiscreteH\x00\x12(\n\x04text\x18\x06 \x01(\x0b\x32\x18.cogment_lab.spaces.TextH\x00\x42\x06\n\x04kindb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0cspaces.proto\x12\x12\x63ogment_lab.spaces\x1a\rndarray.proto\"$\n\x08\x44iscrete\x12\t\n\x01n\x18\x01 \x01(\x05\x12\r\n\x05start\x18\x02 \x01(\x05\"Z\n\x03\x42ox\x12(\n\x03low\x18\x02 \x01(\x0b\x32\x1b.cogment_lab.nd_array.Array\x12)\n\x04high\x18\x03 \x01(\x0b\x32\x1b.cogment_lab.nd_array.Array\"5\n\x0bMultiBinary\x12&\n\x01n\x18\x01 \x01(\x0b\x32\x1b.cogment_lab.nd_array.Array\":\n\rMultiDiscrete\x12)\n\x04nvec\x18\x01 \x01(\x0b\x32\x1b.cogment_lab.nd_array.Array\"|\n\x04\x44ict\x12\x31\n\x06spaces\x18\x01 \x03(\x0b\x32!.cogment_lab.spaces.Dict.SubSpace\x1a\x41\n\x08SubSpace\x12\x0b\n\x03key\x18\x01 \x01(\t\x12(\n\x05space\x18\x02 \x01(\x0b\x32\x19.cogment_lab.spaces.Space\"q\n\x05Tuple\x12\x32\n\x06spaces\x18\x02 \x03(\x0b\x32\".cogment_lab.spaces.Tuple.SubSpace\x1a\x34\n\x08SubSpace\x12(\n\x05space\x18\x01 \x01(\x0b\x32\x19.cogment_lab.spaces.Space\"?\n\x04Text\x12\x12\n\nmax_length\x18\x01 \x01(\x05\x12\x12\n\nmin_length\x18\x02 \x01(\x05\x12\x0f\n\x07\x63harset\x18\x03 \x01(\t\"\xdf\x02\n\x05Space\x12\x30\n\x08\x64iscrete\x18\x01 \x01(\x0b\x32\x1c.cogment_lab.spaces.DiscreteH\x00\x12&\n\x03\x62ox\x18\x02 \x01(\x0b\x32\x17.cogment_lab.spaces.BoxH\x00\x12(\n\x04\x64ict\x18\x03 \x01(\x0b\x32\x18.cogment_lab.spaces.DictH\x00\x12\x37\n\x0cmulti_binary\x18\x04 \x01(\x0b\x32\x1f.cogment_lab.spaces.MultiBinaryH\x00\x12;\n\x0emulti_discrete\x18\x05 \x01(\x0b\x32!.cogment_lab.spaces.MultiDiscreteH\x00\x12*\n\x05tuple\x18\x06 \x01(\x0b\x32\x19.cogment_lab.spaces.TupleH\x00\x12(\n\x04text\x18\x07 \x01(\x0b\x32\x18.cogment_lab.spaces.TextH\x00\x42\x06\n\x04kindb\x06proto3')
 
-_builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'spaces_pb2', globals())
+
+
+_DISCRETE = DESCRIPTOR.message_types_by_name['Discrete']
+_BOX = DESCRIPTOR.message_types_by_name['Box']
+_MULTIBINARY = DESCRIPTOR.message_types_by_name['MultiBinary']
+_MULTIDISCRETE = DESCRIPTOR.message_types_by_name['MultiDiscrete']
+_DICT = DESCRIPTOR.message_types_by_name['Dict']
+_DICT_SUBSPACE = _DICT.nested_types_by_name['SubSpace']
+_TUPLE = DESCRIPTOR.message_types_by_name['Tuple']
+_TUPLE_SUBSPACE = _TUPLE.nested_types_by_name['SubSpace']
+_TEXT = DESCRIPTOR.message_types_by_name['Text']
+_SPACE = DESCRIPTOR.message_types_by_name['Space']
+Discrete = _reflection.GeneratedProtocolMessageType('Discrete', (_message.Message,), {
+  'DESCRIPTOR' : _DISCRETE,
+  '__module__' : 'spaces_pb2'
+  # @@protoc_insertion_point(class_scope:cogment_lab.spaces.Discrete)
+  })
+_sym_db.RegisterMessage(Discrete)
+
+Box = _reflection.GeneratedProtocolMessageType('Box', (_message.Message,), {
+  'DESCRIPTOR' : _BOX,
+  '__module__' : 'spaces_pb2'
+  # @@protoc_insertion_point(class_scope:cogment_lab.spaces.Box)
+  })
+_sym_db.RegisterMessage(Box)
+
+MultiBinary = _reflection.GeneratedProtocolMessageType('MultiBinary', (_message.Message,), {
+  'DESCRIPTOR' : _MULTIBINARY,
+  '__module__' : 'spaces_pb2'
+  # @@protoc_insertion_point(class_scope:cogment_lab.spaces.MultiBinary)
+  })
+_sym_db.RegisterMessage(MultiBinary)
+
+MultiDiscrete = _reflection.GeneratedProtocolMessageType('MultiDiscrete', (_message.Message,), {
+  'DESCRIPTOR' : _MULTIDISCRETE,
+  '__module__' : 'spaces_pb2'
+  # @@protoc_insertion_point(class_scope:cogment_lab.spaces.MultiDiscrete)
+  })
+_sym_db.RegisterMessage(MultiDiscrete)
+
+Dict = _reflection.GeneratedProtocolMessageType('Dict', (_message.Message,), {
+
+  'SubSpace' : _reflection.GeneratedProtocolMessageType('SubSpace', (_message.Message,), {
+    'DESCRIPTOR' : _DICT_SUBSPACE,
+    '__module__' : 'spaces_pb2'
+    # @@protoc_insertion_point(class_scope:cogment_lab.spaces.Dict.SubSpace)
+    })
+  ,
+  'DESCRIPTOR' : _DICT,
+  '__module__' : 'spaces_pb2'
+  # @@protoc_insertion_point(class_scope:cogment_lab.spaces.Dict)
+  })
+_sym_db.RegisterMessage(Dict)
+_sym_db.RegisterMessage(Dict.SubSpace)
+
+Tuple = _reflection.GeneratedProtocolMessageType('Tuple', (_message.Message,), {
+
+  'SubSpace' : _reflection.GeneratedProtocolMessageType('SubSpace', (_message.Message,), {
+    'DESCRIPTOR' : _TUPLE_SUBSPACE,
+    '__module__' : 'spaces_pb2'
+    # @@protoc_insertion_point(class_scope:cogment_lab.spaces.Tuple.SubSpace)
+    })
+  ,
+  'DESCRIPTOR' : _TUPLE,
+  '__module__' : 'spaces_pb2'
+  # @@protoc_insertion_point(class_scope:cogment_lab.spaces.Tuple)
+  })
+_sym_db.RegisterMessage(Tuple)
+_sym_db.RegisterMessage(Tuple.SubSpace)
+
+Text = _reflection.GeneratedProtocolMessageType('Text', (_message.Message,), {
+  'DESCRIPTOR' : _TEXT,
+  '__module__' : 'spaces_pb2'
+  # @@protoc_insertion_point(class_scope:cogment_lab.spaces.Text)
+  })
+_sym_db.RegisterMessage(Text)
+
+Space = _reflection.GeneratedProtocolMessageType('Space', (_message.Message,), {
+  'DESCRIPTOR' : _SPACE,
+  '__module__' : 'spaces_pb2'
+  # @@protoc_insertion_point(class_scope:cogment_lab.spaces.Space)
+  })
+_sym_db.RegisterMessage(Space)
+
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
@@ -48,8 +131,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _DICT._serialized_end=420
   _DICT_SUBSPACE._serialized_start=355
   _DICT_SUBSPACE._serialized_end=420
-  _TEXT._serialized_start=422
-  _TEXT._serialized_end=485
-  _SPACE._serialized_start=488
-  _SPACE._serialized_end=795
+  _TUPLE._serialized_start=422
+  _TUPLE._serialized_end=535
+  _TUPLE_SUBSPACE._serialized_start=483
+  _TUPLE_SUBSPACE._serialized_end=535
+  _TEXT._serialized_start=537
+  _TEXT._serialized_end=600
+  _SPACE._serialized_start=603
+  _SPACE._serialized_end=954
 # @@protoc_insertion_point(module_scope)

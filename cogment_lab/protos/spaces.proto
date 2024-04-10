@@ -44,6 +44,13 @@ message Dict {
   repeated SubSpace spaces = 1;
 }
 
+message Tuple {
+  message SubSpace {
+    Space space = 1;
+  }
+  repeated SubSpace spaces = 2;
+}
+
 message Text {
   int32 max_length = 1;
   int32 min_length = 2;
@@ -57,6 +64,7 @@ message Space {
     Dict dict = 3;
     MultiBinary multi_binary = 4;
     MultiDiscrete multi_discrete = 5;
-    Text text = 6;
+    Tuple tuple = 6;
+    Text text = 7;
   }
 }

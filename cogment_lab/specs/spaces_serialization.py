@@ -22,6 +22,7 @@ from cogment_lab.generated.spaces_pb2 import MultiBinary  # type: ignore
 from cogment_lab.generated.spaces_pb2 import MultiDiscrete  # type: ignore
 from cogment_lab.generated.spaces_pb2 import Space  # type: ignore
 from cogment_lab.generated.spaces_pb2 import Text  # type: ignore
+from cogment_lab.generated.spaces_pb2 import Tuple  # type: ignore
 
 from .ndarray_serialization import (
     SerializationFormat,
@@ -66,6 +67,12 @@ def serialize_gym_space(space: gym.Space, serialization_format=SerializationForm
             spaces.append(Dict.SubSpace(key=key, space=serialize_gym_space(gym_sub_space)))
         return Space(dict=Dict(spaces=spaces))
 
+    if isinstance(space, gym.spaces.Tuple):
+        spaces = []
+        for gym_sub_space in space.spaces:
+            spaces.append(Tuple.SubSpace(space=serialize_gym_space(gym_sub_space, serialization_format)))
+        return Space(tuple=Tuple(spaces=spaces))
+
     if isinstance(space, gym.spaces.Text):
         return Space(text=Text(max_length=space.max_length, min_length=space.min_length, charset=space.characters))
 
@@ -101,8 +108,11 @@ def deserialize_space(pb_space: Space) -> gym.Space:
         spaces = []
         for sub_space in dict_space_pb.spaces:
             spaces.append((sub_space.key, deserialize_space(sub_space.space)))
-
         return gym.spaces.Dict(spaces=spaces)
+    if space_kind == "tuple":
+        tuple_space_pb = pb_space.tuple
+        spaces = [deserialize_space(sub_space) for sub_space in tuple_space_pb.spaces]
+        return gym.spaces.Tuple(spaces=spaces)
     if space_kind == "text":
         text_space_pb = pb_space.text
         return gym.spaces.Text(
