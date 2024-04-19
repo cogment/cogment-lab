@@ -34,7 +34,7 @@ def get_current_arch() -> Arch:
     if py_machine in ["x86_64", "i686", "AMD64"]:
         return Arch.AMD64
 
-    if py_machine in ["arm64"]:
+    if py_machine in ["arm64", "aarch64"]:
         return Arch.ARM64
 
     raise RuntimeError(f"Unsupported architecture [{py_machine}]")
