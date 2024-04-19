@@ -31,7 +31,7 @@ class Arch(Enum):
 
 def get_current_arch() -> Arch:
     py_machine = platform.machine()
-    if py_machine in ["x86_64", "i686", "AMD64"]:
+    if py_machine in ["x86_64", "i686", "AMD64", "aarch64"]:
         return Arch.AMD64
 
     if py_machine in ["arm64"]:
